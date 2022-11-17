@@ -3,7 +3,7 @@ package com.epam.training.webshop.cart;
 import com.epam.training.webshop.coupon.Coupon;
 import com.epam.training.webshop.order.Observable;
 import com.epam.training.webshop.order.Order;
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 
 import java.util.List;
 

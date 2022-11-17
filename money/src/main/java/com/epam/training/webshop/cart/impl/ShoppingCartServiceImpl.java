@@ -8,8 +8,8 @@ import com.epam.training.webshop.gross.GrossPriceCalculator;
 import com.epam.training.webshop.order.Observer;
 import com.epam.training.webshop.order.Order;
 import com.epam.training.webshop.order.OrderRepository;
-import com.epam.training.webshop.product.Product;
-import com.epam.training.webshop.product.ProductRepository;
+import com.epam.training.webshop.product.persistence.repository.ProductRepository;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void addProduct(final String productName) {
-        productRepository.getProductByName(productName)
+        productRepository.findProductByName(productName)
                 .ifPresentOrElse(cart::addProduct,
                         () -> {
                             throw new UnknownProductException(productName);
@@ -113,7 +113,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public double getDiscountForCoupons() {
         double discount = 0;
         for (Coupon coupon : cart.getCouponsFromBasket()) {
-            discount += coupon.getDiscountForProducts(cart.getProducts());
+//            discount += coupon.getDiscountForProducts(cart.getProducts());
         }
         return discount;
     }

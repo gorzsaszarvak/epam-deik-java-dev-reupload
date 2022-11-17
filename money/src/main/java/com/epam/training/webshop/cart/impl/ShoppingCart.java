@@ -2,7 +2,7 @@ package com.epam.training.webshop.cart.impl;
 
 import com.epam.training.webshop.cart.Cart;
 import com.epam.training.webshop.coupon.Coupon;
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Component;

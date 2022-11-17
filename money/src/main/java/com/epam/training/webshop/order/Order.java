@@ -1,6 +1,6 @@
 package com.epam.training.webshop.order;
 
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

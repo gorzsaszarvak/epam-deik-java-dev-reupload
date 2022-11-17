@@ -1,7 +1,7 @@
 package com.epam.training.webshop.warehouse.impl;
 
 import com.epam.training.webshop.cart.Cart;
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 import com.epam.training.webshop.warehouse.WareHouse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,12 +1,18 @@
 package com.epam.training.webshop.coupon;
 
-import com.epam.training.webshop.product.Product;
+import lombok.Data;
 
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-public interface Coupon {
+@Entity
+@Data
+public class Coupon {
 
-    String getId();
-
-    double getDiscountForProducts(List<Product> products);
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private double value;
 }

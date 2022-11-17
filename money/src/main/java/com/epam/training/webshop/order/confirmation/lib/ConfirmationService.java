@@ -1,6 +1,6 @@
 package com.epam.training.webshop.order.confirmation.lib;
 
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 
 import java.util.List;
 

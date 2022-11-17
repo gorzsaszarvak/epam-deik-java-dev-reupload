@@ -6,7 +6,7 @@ import com.epam.training.webshop.cart.impl.ShoppingCartServiceImpl;
 import com.epam.training.webshop.gross.GrossPriceCalculator;
 import com.epam.training.webshop.order.OrderRepository;
 import com.epam.training.webshop.order.confirmation.OrderConfirmationService;
-import com.epam.training.webshop.product.ProductRepository;
+import com.epam.training.webshop.product.persistence.repository.ProductRepository;
 import com.epam.training.webshop.warehouse.WareHouse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

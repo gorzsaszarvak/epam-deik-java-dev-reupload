@@ -1,7 +1,7 @@
 package com.epam.training.webshop.order.confirmation.lib.impl;
 
 import com.epam.training.webshop.order.confirmation.lib.ConfirmationService;
-import com.epam.training.webshop.product.Product;
+import com.epam.training.webshop.product.persistence.entitiy.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

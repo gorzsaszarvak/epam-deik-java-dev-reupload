@@ -2,10 +2,13 @@ package com.epam.training.webshop.example;
 
 import com.epam.training.webshop.cart.Cart;
 import com.epam.training.webshop.order.OrderRepository;
-import com.epam.training.webshop.product.ProductRepository;
+import com.epam.training.webshop.product.persistence.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/*
+Példa osztály, amely bemutatja a DI stratégiákat.
+ */
 @Component
 public class SpringDependencyInjectionExample {
 
