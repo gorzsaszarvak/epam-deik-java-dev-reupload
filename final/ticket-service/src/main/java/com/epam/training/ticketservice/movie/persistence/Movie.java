@@ -20,9 +20,9 @@ public class Movie {
     @Column(unique=true)
     private String title;
     private String genre;
-    private double length;
+    private int length;
 
-    public Movie(String title, String genre, double length) {
+    public Movie(String title, String genre, int length) {
         this.title = title;
         this.genre = genre;
         this.length = length;

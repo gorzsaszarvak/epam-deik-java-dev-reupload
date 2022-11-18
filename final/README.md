@@ -55,6 +55,7 @@ program futása leáll.
 * Az egyes parancsokhoz lehetséges több szóból álló paraméter megadása úgy, 
 ha az adott paramétert idézőjelek közé írjuk. Például a következő parancs 
 a _Spirited Away_ című film létrehozására használható.
+
 ```
 create movie "Sprited Away" animation 125
 ```

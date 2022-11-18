@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.room;
+package com.epam.training.ticketservice.room.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,12 +20,12 @@ public class Room {
     @GeneratedValue
     private long id;
     private String name;
-    private double rows;
-    private double columns;
+    private int rows;
+    private int columns;
 
-    private double seats;
+    private int seats = rows * columns;
 
-    public Room(String name, double rows, double columns) {
+    public Room(String name, int rows, int columns) {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
@@ -37,6 +37,6 @@ public class Room {
         return "Room " + name + " with "
                 + seats + " seats, "
                 + rows + " rows and "
-                + columns + "columns";
+                + columns + " columns";
     }
 }

@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.room;
+package com.epam.training.ticketservice.room.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

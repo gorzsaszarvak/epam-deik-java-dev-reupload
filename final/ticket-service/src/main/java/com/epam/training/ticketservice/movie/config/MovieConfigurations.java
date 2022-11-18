@@ -21,7 +21,7 @@ public class MovieConfigurations {
     private String starWarGenre;
 
     @Min(1)
-    private double starWarLength;
+    private int starWarLength;
 
     @NotBlank
     private String pulpFicName;
@@ -30,6 +30,6 @@ public class MovieConfigurations {
     private String pulpFicGenre;
 
     @Min(1)
-    private double pulpFicLength;
+    private int pulpFicLength;
 
 }
