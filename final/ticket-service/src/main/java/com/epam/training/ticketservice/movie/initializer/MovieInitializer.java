@@ -1,5 +1,6 @@
-package com.epam.training.ticketservice.movie;
+package com.epam.training.ticketservice.movie.initializer;
 
+import com.epam.training.ticketservice.movie.config.MovieConfigurations;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.movie.persistence.MovieRepository;
 import lombok.RequiredArgsConstructor;
