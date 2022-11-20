@@ -1,8 +1,11 @@
  package com.epam.training.ticketservice.cli.handler;
 
+import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.room.RoomService;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 
@@ -11,13 +14,15 @@ public class RoomCommandHandler {
 
     private final RoomService roomService;
 
+     private final AccountService accountService;
 
-    public RoomCommandHandler(RoomService roomService) {
-        this.roomService = roomService;
-    }
+     public RoomCommandHandler(RoomService roomService, AccountService accountService) {
+         this.roomService = roomService;
+         this.accountService = accountService;
+     }
 
-    @ShellMethod(value = "Create room", key = "create room")
-    //TODO(admin method)
+     @ShellMethod(value = "Create room", key = "create room")
+     @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String createRoom(final String name, final int rows, final int columns) {
         try {
             roomService.createRoom(name, rows, columns);
@@ -28,7 +33,7 @@ public class RoomCommandHandler {
     }
 
     @ShellMethod(value = "Update room", key = "update room")
-    //TODO(admin method)
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String updateRoom(final String name, final int rows, final int columns) {
         try {
             roomService.updateRoom(name, rows, columns);
@@ -39,7 +44,7 @@ public class RoomCommandHandler {
     }
 
     @ShellMethod(value = "Delete room", key = "delete room")
-    //TODO(admin method)
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String deleteRoom(final String name) {
         try {
             roomService.deleteRoom(name);
@@ -64,5 +69,13 @@ public class RoomCommandHandler {
             return "There are no rooms at the moment";
         }
     }
+
+     private Availability loggedInAsAdmin() {
+         if(accountService.loggedInAsAdmin()){
+             return Availability.available();
+         } else {
+             return Availability.unavailable("Not logged in as admin");
+         }
+     }
 
 }

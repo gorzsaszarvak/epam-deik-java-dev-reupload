@@ -1,8 +1,11 @@
 package com.epam.training.ticketservice.cli.handler;
 
+import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.movie.MovieService;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 
@@ -10,13 +13,15 @@ import java.util.List;
 public class MovieCommandHandler {
 
     private final MovieService movieService;
+    private final AccountService accountService;
 
-    public MovieCommandHandler(MovieService movieService) {
+    public MovieCommandHandler(MovieService movieService, AccountService accountService) {
         this.movieService = movieService;
+        this.accountService = accountService;
     }
 
     @ShellMethod(value = "Create movie", key = "create movie")
-    //TODO(admin method)
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String createMovie(final String title, final String genre, final int movieLength) {
 
         try {
@@ -28,7 +33,7 @@ public class MovieCommandHandler {
     }
 
     @ShellMethod(value = "Update movie", key = "update movie")
-    //TODO(admin method)
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String updateMovie(final String title, final String genre, final int movieLength) {
         try {
             movieService.updateMovie(title, genre, movieLength);
@@ -39,7 +44,7 @@ public class MovieCommandHandler {
     }
 
     @ShellMethod(value = "Delete movie", key = "delete movie")
-    //TODO(admin method)
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String deleteMovie(final String title) {
         try {
             movieService.deleteMovie(title);
@@ -62,6 +67,14 @@ public class MovieCommandHandler {
             return stringBuilder.toString();
         } catch (Exception exception) {
             return "There are no movies at the moment";
+        }
+    }
+
+    private Availability loggedInAsAdmin() {
+        if(accountService.loggedInAsAdmin()){
+            return Availability.available();
+        } else {
+            return Availability.unavailable("Not logged in as admin");
         }
     }
 
