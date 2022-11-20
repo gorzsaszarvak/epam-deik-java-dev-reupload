@@ -4,10 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class UserAccount extends Account {
 
     //TODO(tickets)

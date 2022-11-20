@@ -8,5 +8,6 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
 
     Optional<Account> findAccountByUsername(String username);
 
-    Optional<Account> findAccountByActive(boolean active);
+    Optional<Account> findAccountByIsActive(boolean active);
+
 }

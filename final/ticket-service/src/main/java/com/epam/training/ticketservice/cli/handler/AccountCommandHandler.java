@@ -1,8 +1,10 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
+import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+@ShellComponent
 public class AccountCommandHandler {
     private final AccountService accountService;
 
@@ -45,7 +47,7 @@ public class AccountCommandHandler {
         try {
             return accountService.describeAccount();
         } catch (Exception exception) {
-            return "Error signing in: " + exception.getMessage();
+            return exception.getMessage();
         }
     }
 

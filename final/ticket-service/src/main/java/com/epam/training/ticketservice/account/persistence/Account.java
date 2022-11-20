@@ -17,10 +17,18 @@ public class Account{
     private long id;
     private String username;
     private String password;
-    private boolean isActive = false;
+    private boolean isActive;
 
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void setActiveTrue() {
+        this.isActive = true;
+    }
+
+    public void setActiveFalse() {
+        this.isActive = false;
     }
 }

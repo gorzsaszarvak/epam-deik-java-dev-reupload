@@ -9,6 +9,7 @@ public interface AccountService {
     void createUserAccount(String username, String password);
 
     void signIn(String username, String password);
+    //TODO(account is not set active for some reason)
 
     String describeAccount();
 
