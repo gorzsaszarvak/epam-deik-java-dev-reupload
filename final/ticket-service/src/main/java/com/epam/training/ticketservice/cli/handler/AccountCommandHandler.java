@@ -12,7 +12,7 @@ public class AccountCommandHandler {
         this.accountService = accountService;
     }
 
-    @ShellMethod(value = "Sign into privileged account", key = "sign in privileged")
+    @ShellMethod(value = "Sign into admin account", key = "sign in privileged")
     public String signInPrivileged(String username, String password) {
         try {
             accountService.signIn(username, password);

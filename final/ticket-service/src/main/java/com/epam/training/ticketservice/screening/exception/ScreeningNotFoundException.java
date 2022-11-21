@@ -1,7 +1,9 @@
 package com.epam.training.ticketservice.screening.exception;
 
+import com.epam.training.ticketservice.screening.persistence.Screening;
+
 public class ScreeningNotFoundException extends RuntimeException{
-    public ScreeningNotFoundException(final String screening) {
-        super("No screening found with: " + screening);
+    public ScreeningNotFoundException(final Screening screening) {
+        super("No screening found with: " + screening.toString());
     }
 }

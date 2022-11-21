@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.cli.handler;
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import org.springframework.shell.Availability;
+import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@ShellComponent
 public class ScreeningCommandHandler {
 
     private final ScreeningService screeningService;
@@ -61,7 +63,8 @@ public class ScreeningCommandHandler {
 
     private Date parseStartTime(String startTime) {
         try {
-            return new SimpleDateFormat("yyyy-mm-dd hh:mm").parse(startTime);
+            Date date = new SimpleDateFormat("yyyy-mm-dd hh:mm").parse(startTime);
+            return date;
         } catch (Exception exception) {
             throw new RuntimeException("Invalid date format");
         }

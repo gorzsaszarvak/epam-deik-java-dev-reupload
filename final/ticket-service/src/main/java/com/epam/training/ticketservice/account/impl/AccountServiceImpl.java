@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createUserAccount(String username, String password) {
-        if(!accountRepository.findAccountByUsername(username).isPresent()){
+        if(accountRepository.findAccountByUsername(username).isEmpty()){
             accountRepository.save(new UserAccount(username, password));
         } else {
             throw new UsernameAlreadyExistsException(username);
@@ -41,16 +41,19 @@ public class AccountServiceImpl implements AccountService {
     public void signIn(String username, String password) {
         var accountToLogInto = accountRepository.findAccountByUsername(username);
         if(accountToLogInto.isPresent()) {
-            if(!accountRepository.findAccountByIsActive(true).isPresent()) {
+            if(accountRepository.findAccountByIsActive(true).isEmpty()) {
                 if (accountToLogInto.get().getPassword().equals(password)) {
                     accountRepository.findAccountByUsername(username).get().setActiveTrue();
                 } else {
-                    throw new WrongPasswordException(username);}
+                    throw new WrongPasswordException(username);
+                }
             } else {
-                    var activeAccount = accountRepository.findAccountByIsActive(true).get().getUsername();
-                    throw new AlreadyLoggedInException(activeAccount);}
+                var activeAccount = accountRepository.findAccountByIsActive(true).get().getUsername();
+                throw new AlreadyLoggedInException(activeAccount);
+            }
         } else {
-            throw new AccountDoesntExistException(username);}
+            throw new AccountDoesntExistException(username);
+        }
     }
 
     @Override
@@ -66,6 +69,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean loggedInAsAdmin() {
         var activeAccount = accountRepository.findAccountByIsActive(true);
-        return (activeAccount.get() instanceof AdminAccount);
+        if(activeAccount.isPresent()) {
+            return activeAccount.get() instanceof AdminAccount;
+        } else {
+            return false;
+        }
     }
 }

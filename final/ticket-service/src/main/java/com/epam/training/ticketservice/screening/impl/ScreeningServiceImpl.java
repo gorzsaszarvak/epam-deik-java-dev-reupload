@@ -5,12 +5,10 @@ import com.epam.training.ticketservice.movie.persistence.MovieRepository;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.room.persistence.RoomRepository;
 import com.epam.training.ticketservice.screening.ScreeningService;
-import com.epam.training.ticketservice.screening.exception.MovieOrRoomNotFoundException;
-import com.epam.training.ticketservice.screening.exception.NoScreeningsFoundException;
-import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
-import com.epam.training.ticketservice.screening.exception.TimeFrameNotAvailableException;
+import com.epam.training.ticketservice.screening.exception.*;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import com.epam.training.ticketservice.screening.persistence.ScreeningRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class ScreeningServiceImpl implements ScreeningService {
 
     ScreeningRepository screeningRepository;
@@ -51,13 +50,9 @@ public class ScreeningServiceImpl implements ScreeningService {
             if(timeFrameIsAvailable(newScreening)) {
                 screeningRepository.save(newScreening);
             }
-            else {
-                throw new TimeFrameNotAvailableException(newScreening.toString());
-            }
         } else {
             throw new MovieOrRoomNotFoundException(movieTitle, roomName);
         }
-
     }
 
     @Override
@@ -68,15 +63,27 @@ public class ScreeningServiceImpl implements ScreeningService {
             if(screeningInRepo.isPresent()) {
                 screeningRepository.deleteById(screeningInRepo.get().getId());
             } else {
-                throw new ScreeningNotFoundException(screeningToDelete.toString());
+                throw new ScreeningNotFoundException(screeningToDelete.get());
             }
         } else {
             throw new MovieOrRoomNotFoundException(movieTitle, roomName);
         }
     }
 
-    private boolean timeFrameIsAvailable(Screening screening) {
-        //TODO(check if time frame is available)
+    private boolean timeFrameIsAvailable(Screening newScreening) {
+        final long breakLength = 10 * 60000;
+        for(Screening screening : screeningRepository.findAll()){
+            if(newScreening.getStartTime().before(screening.getEndTime())
+                    && newScreening.getEndTime().after(screening.getStartTime())) {
+
+                throw new TimeFrameNotAvailableException(newScreening);
+
+            } else if(newScreening.getEndTime().before(new Date(screening.getEndTime().getTime() + breakLength))
+                    && newScreening.getEndTime().after(screening.getEndTime())) {
+
+                throw new ScreeningOverlapsBreakException(newScreening);
+            }
+        }
         return true;
     }
 }

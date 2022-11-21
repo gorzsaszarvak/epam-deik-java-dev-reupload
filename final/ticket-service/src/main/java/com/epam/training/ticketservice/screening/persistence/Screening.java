@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.h2.util.DateTimeUtils;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,10 +28,13 @@ public class Screening {
     private Room room;
     private Date startTime;
 
+    private Date endTime;
+
     public Screening(Movie movie, Room room, Date screeningTime) {
         this.movie = movie;
         this.room = room;
         this.startTime = screeningTime;
+        this.endTime = new Date(startTime.getTime() + (movie.getLength() * 60000L));
     }
 
     @Override

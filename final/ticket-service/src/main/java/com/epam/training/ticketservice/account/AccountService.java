@@ -11,6 +11,8 @@ public interface AccountService {
     void signIn(String username, String password);
     //TODO(account is not set active for some reason)
 
+    //TODO void signOut();
+
     String describeAccount();
 
     Boolean loggedInAsAdmin();
