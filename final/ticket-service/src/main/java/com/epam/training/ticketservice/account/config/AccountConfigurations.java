@@ -16,5 +16,6 @@ public class AccountConfigurations {
     @NotBlank
     private String adminUsername;
 
-    @NotBlank String adminPassword;
+    @NotBlank
+    private String adminPassword;
 }

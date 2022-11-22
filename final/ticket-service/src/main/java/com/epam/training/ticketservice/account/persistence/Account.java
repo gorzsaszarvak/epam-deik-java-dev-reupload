@@ -1,5 +1,7 @@
 package com.epam.training.ticketservice.account.persistence;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +11,9 @@ import javax.persistence.Id;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Account{
 
     @Id
@@ -17,18 +21,6 @@ public class Account{
     private long id;
     private String username;
     private String password;
-    private boolean isActive;
 
-    public Account(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public void setActiveTrue() {
-        this.isActive = true;
-    }
-
-    public void setActiveFalse() {
-        this.isActive = false;
-    }
+    private Role role;
 }

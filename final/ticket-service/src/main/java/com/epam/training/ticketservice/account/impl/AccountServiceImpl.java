@@ -4,63 +4,49 @@ import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.account.exception.*;
 import com.epam.training.ticketservice.account.persistence.Account;
 import com.epam.training.ticketservice.account.persistence.AccountRepository;
-import com.epam.training.ticketservice.account.persistence.AdminAccount;
-import com.epam.training.ticketservice.account.persistence.UserAccount;
+import com.epam.training.ticketservice.account.persistence.Role;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
-
     private final AccountRepository accountRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
-
-//    @Override
-//    public void createAdminAccount(String username, String password) {
-//        if(!accountRepository.findAccountByUsername(username).isPresent()){
-//            accountRepository.save(new AdminAccount(username, password));
-//        } else {
-//            throw new UsernameAlreadyExistsException(username);
-//        }
-//
-//    }
 
     @Override
-    public void createUserAccount(String username, String password) {
+    public void createAccount(String username, String password) {
         if(accountRepository.findAccountByUsername(username).isEmpty()){
-            accountRepository.save(new UserAccount(username, password));
+            accountRepository.save(
+                    Account.builder()
+                        .username(username)
+                        .password(password)
+                        .role(Role.USER)
+                        .build());
         } else {
             throw new UsernameAlreadyExistsException(username);
         }
     }
 
     @Override
-    public void signIn(String username, String password) {
-        var accountToLogInto = accountRepository.findAccountByUsername(username);
-        if(accountToLogInto.isPresent()) {
-            if(accountRepository.findAccountByIsActive(true).isEmpty()) {
-                if (accountToLogInto.get().getPassword().equals(password)) {
-                    accountRepository.findAccountByUsername(username).get().setActiveTrue();
-                } else {
-                    throw new WrongPasswordException(username);
-                }
-            } else {
-                var activeAccount = accountRepository.findAccountByIsActive(true).get().getUsername();
-                throw new AlreadyLoggedInException(activeAccount);
-            }
-        } else {
-            throw new AccountDoesntExistException(username);
-        }
-    }
-
-    @Override
     public String describeAccount() {
-        var activeAccount = accountRepository.findAccountByIsActive(true);
-        if(activeAccount.isPresent()) {
-            return activeAccount.get().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!username.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Signed in with ");
+
+            if(loggedInAsAdmin()){
+                sb.append(String.format("privileged account '%s'" , username));
+            } else {
+                sb.append(String.format("account '%s'", username));
+                //TODO(bookings)
+                sb.append("\n You have not booked any tickets yet");
+            }
+
+            return sb.toString();
         } else {
             throw new NotLoggedInException();
         }
@@ -68,11 +54,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean loggedInAsAdmin() {
-        var activeAccount = accountRepository.findAccountByIsActive(true);
-        if(activeAccount.isPresent()) {
-            return activeAccount.get() instanceof AdminAccount;
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    @Override
+    public Account findAccountByUsername(String username) {
+        var account = accountRepository.findAccountByUsername(username);
+        if(account.isPresent()) {
+            return account.get();
         } else {
-            return false;
+            throw new AccountDoesntExistException(username);
         }
     }
+
+
 }

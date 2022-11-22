@@ -1,48 +1,58 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
-public class AccountCommandHandler {
+@RequiredArgsConstructor
+public class AccountCommandHandler extends AuthorityChecks{
+
     private final AccountService accountService;
 
-    public AccountCommandHandler(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private final AuthenticationManager authenticationManager;
 
-    @ShellMethod(value = "Sign into admin account", key = "sign in privileged")
+    @ShellMethod(value = "sign in privileged 'username' 'password'", key = "sign in privileged")
+    @ShellMethodAvailability(value = "notLoggedIn")
     public String signInPrivileged(String username, String password) {
         try {
-            accountService.signIn(username, password);
+            Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+            SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(request));
             return "Signed in as '" + username + "' with admin privileges";
         } catch (Exception exception) {
             return "Error signing in: " + exception.getMessage();
         }
     }
 
-    @ShellMethod(value = "Sign into account", key = "sign in")
+    @ShellMethod(value = "sign in 'username' 'password'", key = "sign in")
+    @ShellMethodAvailability(value = "notLoggedIn")
     public String signIn(String username, String password) {
         try {
-            accountService.signIn(username, password);
+            Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+            SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(request));
             return "Signed in as '" + username + "'";
         } catch (Exception exception) {
             return "Error signing in: " + exception.getMessage();
         }
     }
 
-    @ShellMethod(value = "Create new user account", key = "sign up")
+    @ShellMethod(value = "sign up 'username' 'password'", key = "sign up")
     public String signUp(String username, String password){
         try {
-            accountService.createUserAccount(username, password);
+            accountService.createAccount(username, password);
             return "Created account with username '" + username + "'";
         } catch (Exception exception) {
         return "Error signing in: " + exception.getMessage();
         }
     }
 
-    @ShellMethod(value = "Describe the account currently signed into", key = "describe account")
+    @ShellMethod(value = "describe account", key = "describe account")
     public String describeAccount(){
         try {
             return accountService.describeAccount();

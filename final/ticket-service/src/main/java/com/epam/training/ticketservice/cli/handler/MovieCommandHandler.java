@@ -2,7 +2,7 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.movie.MovieService;
-import org.springframework.shell.Availability;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -10,15 +10,10 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import java.util.List;
 
 @ShellComponent
-public class MovieCommandHandler {
+@RequiredArgsConstructor
+public class MovieCommandHandler extends AuthorityChecks{
 
     private final MovieService movieService;
-    private final AccountService accountService;
-
-    public MovieCommandHandler(MovieService movieService, AccountService accountService) {
-        this.movieService = movieService;
-        this.accountService = accountService;
-    }
 
     @ShellMethod(value = "Create movie", key = "create movie")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
@@ -26,9 +21,9 @@ public class MovieCommandHandler {
 
         try {
             movieService.createMovie(title, genre, movieLength);
-            return "Created movie with title: " + title;
+            return "Created movie.";
         } catch (Exception exception) {
-            return "Could not create movie, reason: " + exception.getMessage();
+            return "Could not create movie: " + exception.getMessage();
         }
     }
 
@@ -37,9 +32,9 @@ public class MovieCommandHandler {
     public String updateMovie(final String title, final String genre, final int movieLength) {
         try {
             movieService.updateMovie(title, genre, movieLength);
-            return "Updated movie with title: " + title;
+            return "Updated movie.";
         } catch (Exception exception) {
-            return "Could not update movie, reason: " + exception.getMessage();
+            return "Could not update movie: " + exception.getMessage();
         }
     }
 
@@ -48,7 +43,7 @@ public class MovieCommandHandler {
     public String deleteMovie(final String title) {
         try {
             movieService.deleteMovie(title);
-            return "Deleted movie with title: " + title;
+            return "Deleted movie.";
         } catch (Exception exception) {
             return "Could not delete movie, reason: " + exception.getMessage();
         }
@@ -70,12 +65,6 @@ public class MovieCommandHandler {
         }
     }
 
-    private Availability loggedInAsAdmin() {
-        if(accountService.loggedInAsAdmin()){
-            return Availability.available();
-        } else {
-            return Availability.unavailable("Not logged in as admin");
-        }
-    }
+
 
 }

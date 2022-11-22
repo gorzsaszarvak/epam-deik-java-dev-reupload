@@ -2,7 +2,7 @@
 
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.room.RoomService;
-import org.springframework.shell.Availability;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -10,16 +10,10 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import java.util.List;
 
  @ShellComponent
-public class RoomCommandHandler {
+ @RequiredArgsConstructor
+public class RoomCommandHandler extends AuthorityChecks{
 
     private final RoomService roomService;
-
-     private final AccountService accountService;
-
-     public RoomCommandHandler(RoomService roomService, AccountService accountService) {
-         this.roomService = roomService;
-         this.accountService = accountService;
-     }
 
      @ShellMethod(value = "Create room", key = "create room")
      @ShellMethodAvailability(value = "loggedInAsAdmin")
@@ -69,13 +63,4 @@ public class RoomCommandHandler {
             return "There are no rooms at the moment";
         }
     }
-
-     private Availability loggedInAsAdmin() {
-         if(accountService.loggedInAsAdmin()){
-             return Availability.available();
-         } else {
-             return Availability.unavailable("Not logged in as admin");
-         }
-     }
-
 }

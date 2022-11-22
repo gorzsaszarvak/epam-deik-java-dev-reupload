@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.screening.ScreeningService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -12,16 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 @ShellComponent
-public class ScreeningCommandHandler {
+@RequiredArgsConstructor
+public class ScreeningCommandHandler extends AuthorityChecks{
 
     private final ScreeningService screeningService;
-
-    private final AccountService accountService;
-
-    public ScreeningCommandHandler(ScreeningService screeningService, AccountService accountService) {
-        this.screeningService = screeningService;
-        this.accountService = accountService;
-    }
 
     @ShellMethod(value = "Create screening", key = "create screening")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
@@ -67,14 +62,6 @@ public class ScreeningCommandHandler {
             return date;
         } catch (Exception exception) {
             throw new RuntimeException("Invalid date format");
-        }
-    }
-
-    private Availability loggedInAsAdmin() {
-        if(accountService.loggedInAsAdmin()){
-            return Availability.available();
-        } else {
-            return Availability.unavailable("Not logged in as admin");
         }
     }
 }

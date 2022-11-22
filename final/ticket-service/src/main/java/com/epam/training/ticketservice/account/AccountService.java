@@ -1,19 +1,14 @@
 package com.epam.training.ticketservice.account;
 
-import java.util.List;
+import com.epam.training.ticketservice.account.persistence.Account;
 
 public interface AccountService {
 
-//    void createAdminAccount(String username, String password);
-
-    void createUserAccount(String username, String password);
-
-    void signIn(String username, String password);
-    //TODO(account is not set active for some reason)
-
-    //TODO void signOut();
+    void createAccount(String username, String password);
 
     String describeAccount();
 
     Boolean loggedInAsAdmin();
+
+    Account findAccountByUsername(String username);
 }
