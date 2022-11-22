@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.h2.util.DateTimeUtils;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -40,7 +41,7 @@ public class Screening {
     @Override
     public String toString() {
         return movie.toString()
-                + ", screened in room " + room.getName() +
-                ", at " + startTime;
+            + ", screened in room " + room.getName()
+            + ", at " + startTime;
     }
 }

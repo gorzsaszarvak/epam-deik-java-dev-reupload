@@ -15,11 +15,11 @@ import javax.validation.constraints.NotBlank;
 public class RoomConfigurations {
 
     @NotBlank
-    private String aName;
+    private String roomName;
 
     @Min(1)
-    private int aRows;
+    private int roomRows;
 
     @Min(1)
-    private int aColumns;
+    private int roomColumns;
 }

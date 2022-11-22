@@ -22,7 +22,9 @@ public class RoomInitializer {
     public void initRooms() {
         log.info("Initializing rooms...");
         final List<Room> rooms = List.of(
-                new Room(roomConfigurations.getAName(),roomConfigurations.getARows(), roomConfigurations.getAColumns())
+            new Room(roomConfigurations.getRoomName(),
+                roomConfigurations.getRoomRows(),
+                roomConfigurations.getRoomColumns())
         );
         roomRepository.saveAll(rooms);
         roomRepository.findAll().forEach(System.out::println);

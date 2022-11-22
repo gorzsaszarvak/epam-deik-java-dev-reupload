@@ -24,9 +24,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<String> listRoomsAsString() {
         List<String> roomsAsString = Stream.of(roomRepository.findAll())
-                .map(x -> x.toString())
-                .collect(Collectors.toList());
-        if(!roomsAsString.isEmpty()) {
+            .map(x -> x.toString())
+            .collect(Collectors.toList());
+        if (!roomsAsString.isEmpty()) {
             return roomsAsString;
         } else {
             throw new NoRoomsFoundException();
@@ -35,7 +35,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void createRoom(String name, int rows, int columns) {
-        if(!roomRepository.findRoomByName(name).isPresent()){
+        if (!roomRepository.findRoomByName(name).isPresent()) {
             roomRepository.save(new Room(name, rows, columns));
         } else {
             throw new RoomAlreadyExistsException(name);
@@ -45,7 +45,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void updateRoom(String name, int rows, int columns) {
-        if(roomRepository.findRoomByName(name).isPresent()){
+        if (roomRepository.findRoomByName(name).isPresent()) {
             roomRepository.delete(roomRepository.findRoomByName(name).get());
             createRoom(name, rows, columns);
         } else {
@@ -56,7 +56,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoom(String name) {
-        if(roomRepository.findRoomByName(name).isPresent()){
+        if (roomRepository.findRoomByName(name).isPresent()) {
             roomRepository.delete(roomRepository.findRoomByName(name).get());
         } else {
             throw new RoomNotFoundException(name);

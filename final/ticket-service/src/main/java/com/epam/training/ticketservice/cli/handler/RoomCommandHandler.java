@@ -1,4 +1,4 @@
- package com.epam.training.ticketservice.cli.handler;
+package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.room.RoomService;
@@ -9,14 +9,14 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 
- @ShellComponent
- @RequiredArgsConstructor
-public class RoomCommandHandler extends AuthorityChecks{
+@ShellComponent
+@RequiredArgsConstructor
+public class RoomCommandHandler extends AuthorityChecks {
 
     private final RoomService roomService;
 
-     @ShellMethod(value = "Create room", key = "create room")
-     @ShellMethodAvailability(value = "loggedInAsAdmin")
+    @ShellMethod(value = "Create room", key = "create room")
+    @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String createRoom(final String name, final int rows, final int columns) {
         try {
             roomService.createRoom(name, rows, columns);
@@ -48,17 +48,17 @@ public class RoomCommandHandler extends AuthorityChecks{
         }
     }
 
-     //TODO(can't print in separate lines)
+    //TODO(can't print in separate lines)
     @ShellMethod(value = "List rooms", key = "list rooms")
     public String listRooms() {
         try {
             List<String> roomsAsString = roomService.listRoomsAsString();
 
             StringBuilder stringBuilder = new StringBuilder();
-            for(String room : roomsAsString) {
+            for (String room : roomsAsString) {
                 stringBuilder.append(room).append(System.lineSeparator());
             }
-            return  stringBuilder.toString();
+            return stringBuilder.toString();
         } catch (Exception exception) {
             return "There are no rooms at the moment";
         }

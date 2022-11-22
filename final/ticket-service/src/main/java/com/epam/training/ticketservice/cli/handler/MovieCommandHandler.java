@@ -11,7 +11,7 @@ import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class MovieCommandHandler extends AuthorityChecks{
+public class MovieCommandHandler extends AuthorityChecks {
 
     private final MovieService movieService;
 
@@ -56,7 +56,7 @@ public class MovieCommandHandler extends AuthorityChecks{
             List<String> moviesAsString = movieService.listMoviesAsString();
 
             StringBuilder stringBuilder = new StringBuilder();
-            for(String movie : moviesAsString){
+            for (String movie : moviesAsString) {
                 stringBuilder.append(movie).append(System.lineSeparator());
             }
             return stringBuilder.toString();
@@ -64,7 +64,6 @@ public class MovieCommandHandler extends AuthorityChecks{
             return "There are no movies at the moment";
         }
     }
-
 
 
 }

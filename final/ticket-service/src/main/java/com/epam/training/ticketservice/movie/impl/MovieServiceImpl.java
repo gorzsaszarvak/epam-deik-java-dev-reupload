@@ -25,10 +25,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<String> listMoviesAsString() {
         List<String> moviesAsString = Stream.of(movieRepository.findAll())
-                .map(x -> x.toString())
-                .collect(Collectors.toList());
+            .map(x -> x.toString())
+            .collect(Collectors.toList());
 
-        if(!moviesAsString.isEmpty()) {
+        if (!moviesAsString.isEmpty()) {
             return moviesAsString;
         } else {
             throw new NoMoviesFoundException();
@@ -37,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void createMovie(String title, String genre, int movieLength) {
-        if(!movieRepository.findMovieByTitle(title).isPresent()) {
+        if (!movieRepository.findMovieByTitle(title).isPresent()) {
             movieRepository.save(new Movie(title, genre, movieLength));
         } else {
             throw new MovieAlreadyExistsException(title);
@@ -56,7 +56,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(String title) {
-        if(movieRepository.findMovieByTitle(title).isPresent()){
+        if (movieRepository.findMovieByTitle(title).isPresent()) {
             movieRepository.delete(movieRepository.findMovieByTitle(title).get());
         } else {
             throw new MovieNotFoundException(title);

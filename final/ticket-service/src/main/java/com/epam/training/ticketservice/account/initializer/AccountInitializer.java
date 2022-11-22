@@ -21,10 +21,10 @@ public class AccountInitializer {
     public void initAccounts() {
         log.info("Initializing accounts...");
         Account admin = Account.builder()
-                        .username(accountConfigurations.getAdminUsername())
-                        .password(accountConfigurations.getAdminPassword())
-                        .role(Role.ADMIN)
-                        .build();
+            .username(accountConfigurations.getAdminUsername())
+            .password(accountConfigurations.getAdminPassword())
+            .role(Role.ADMIN)
+            .build();
         accountRepository.save(admin);
         log.info("Accounts initialized.");
     }

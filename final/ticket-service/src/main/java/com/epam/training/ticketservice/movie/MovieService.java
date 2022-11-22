@@ -2,7 +2,7 @@ package com.epam.training.ticketservice.movie;
 
 import java.util.List;
 
-public interface MovieService{
+public interface MovieService {
 
     List<String> listMoviesAsString();
 

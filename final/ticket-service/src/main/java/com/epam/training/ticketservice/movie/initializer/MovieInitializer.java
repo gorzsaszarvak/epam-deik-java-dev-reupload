@@ -22,8 +22,10 @@ public class MovieInitializer {
     public void initMovies() {
         log.info("Initializing movies...");
         final List<Movie> movies = List.of(
-                new Movie(movieConfigurations.getStarWarName(), movieConfigurations.getStarWarGenre(), movieConfigurations.getStarWarLength()),
-                new Movie(movieConfigurations.getPulpFicName(), movieConfigurations.getPulpFicGenre(), movieConfigurations.getPulpFicLength())
+            new Movie(movieConfigurations.getStarWarName(), movieConfigurations.getStarWarGenre(),
+                movieConfigurations.getStarWarLength()),
+            new Movie(movieConfigurations.getPulpFicName(), movieConfigurations.getPulpFicGenre(),
+                movieConfigurations.getPulpFicLength())
         );
         movieRepository.saveAll(movies);
         movieRepository.findAll().forEach(System.out::println);

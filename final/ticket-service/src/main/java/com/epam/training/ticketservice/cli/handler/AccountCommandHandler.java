@@ -2,9 +2,11 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -12,7 +14,7 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class AccountCommandHandler extends AuthorityChecks{
+public class AccountCommandHandler extends AuthorityChecks {
 
     private final AccountService accountService;
 
@@ -26,7 +28,7 @@ public class AccountCommandHandler extends AuthorityChecks{
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(request));
             return "Signed in as '" + username + "' with admin privileges";
         } catch (Exception exception) {
-            return "Error signing in: " + exception.getMessage();
+            return "Login failed due to incorrect credentials";
         }
     }
 
@@ -38,22 +40,32 @@ public class AccountCommandHandler extends AuthorityChecks{
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(request));
             return "Signed in as '" + username + "'";
         } catch (Exception exception) {
-            return "Error signing in: " + exception.getMessage();
+            return "Login failed due to incorrect credentials";
+        }
+    }
+
+    @ShellMethod(value = "sign out", key = "sign out")
+    public void signOut() {
+        try {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            System.out.println("Signed out");
+        } catch (AuthenticationException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
     @ShellMethod(value = "sign up 'username' 'password'", key = "sign up")
-    public String signUp(String username, String password){
+    public String signUp(String username, String password) {
         try {
             accountService.createAccount(username, password);
             return "Created account with username '" + username + "'";
         } catch (Exception exception) {
-        return "Error signing in: " + exception.getMessage();
+            return "Error signing up: " + exception.getMessage();
         }
     }
 
     @ShellMethod(value = "describe account", key = "describe account")
-    public String describeAccount(){
+    public String describeAccount() {
         try {
             return accountService.describeAccount();
         } catch (Exception exception) {

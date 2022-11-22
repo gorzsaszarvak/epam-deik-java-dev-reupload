@@ -14,7 +14,7 @@ import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class ScreeningCommandHandler extends AuthorityChecks{
+public class ScreeningCommandHandler extends AuthorityChecks {
 
     private final ScreeningService screeningService;
 
@@ -42,15 +42,15 @@ public class ScreeningCommandHandler extends AuthorityChecks{
 
     //TODO(can't print in separate lines)
     @ShellMethod(value = "List screenings", key = "list screenings")
-    public String listScreenings(){
+    public String listScreenings() {
         try {
             List<String> screeningsAsString = screeningService.listScreenings();
 
             StringBuilder stringBuilder = new StringBuilder();
-            for(String screening : screeningsAsString) {
+            for (String screening : screeningsAsString) {
                 stringBuilder.append(screening).append(System.lineSeparator());
             }
-            return  stringBuilder.toString();
+            return stringBuilder.toString();
         } catch (Exception exception) {
             return "There are no screenings at the moment";
         }

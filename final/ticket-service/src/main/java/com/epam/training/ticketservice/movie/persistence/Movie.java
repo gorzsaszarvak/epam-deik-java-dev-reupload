@@ -1,6 +1,10 @@
 package com.epam.training.ticketservice.movie.persistence;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +21,7 @@ public class Movie {
     @Id
     @GeneratedValue
     private long id;
-    @Column(unique=true)
+    @Column(unique = true)
     private String title;
     private String genre;
     private int length;
