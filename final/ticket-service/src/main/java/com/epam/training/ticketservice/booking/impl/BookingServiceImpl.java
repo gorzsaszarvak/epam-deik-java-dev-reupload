@@ -50,10 +50,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void doSeatsExist(Screening screening, List<Seat> seats) throws SeatDoesNotExistException {
-        for(Seat seat : seats) {
-            if(seat.getRow() < 0 || seat.getColumn() < 0) {
+        for (Seat seat : seats) {
+            if (seat.getRow() < 0 || seat.getColumn() < 0) {
                 throw new SeatDoesNotExistException(seat.toString());
-            } else if (seat.getRow() > screening.getRoom().getRows() || seat.getColumn() > screening.getRoom().getColumns()) {
+            } else if (seat.getRow() > screening.getRoom().getRows()
+                || seat.getColumn() > screening.getRoom().getColumns()) {
                 throw new SeatDoesNotExistException(seat.toString());
             }
         }

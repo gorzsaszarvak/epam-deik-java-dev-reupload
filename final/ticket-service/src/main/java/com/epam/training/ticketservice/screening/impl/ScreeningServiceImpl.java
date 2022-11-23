@@ -86,7 +86,7 @@ public class ScreeningServiceImpl implements ScreeningService {
             roomRepository.findRoomByName(roomName).get(),
             startTime);
 
-        if(screening.isPresent()){
+        if (screening.isPresent()) {
             return screening.get();
         } else {
             throw new ScreeningNotFoundException();
