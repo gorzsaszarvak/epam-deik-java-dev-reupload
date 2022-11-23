@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.cli.handler;
 
-import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class RoomCommandHandler extends AuthorityChecks {
+public class RoomCommandHandler extends HelperMethods {
 
     private final RoomService roomService;
 

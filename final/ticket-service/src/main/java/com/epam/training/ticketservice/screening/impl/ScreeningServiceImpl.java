@@ -72,10 +72,24 @@ public class ScreeningServiceImpl implements ScreeningService {
             if (screeningInRepo.isPresent()) {
                 screeningRepository.deleteById(screeningInRepo.get().getId());
             } else {
-                throw new ScreeningNotFoundException(screeningToDelete.get());
+                throw new ScreeningNotFoundException();
             }
         } else {
             throw new MovieOrRoomNotFoundException(movieTitle, roomName);
+        }
+    }
+
+    @Override
+    public Screening findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime) {
+        Optional<Screening> screening = screeningRepository.findScreeningByMovieAndRoomAndStartTime(
+            movieRepository.findMovieByTitle(movieTitle).get(),
+            roomRepository.findRoomByName(roomName).get(),
+            startTime);
+
+        if(screening.isPresent()){
+            return screening.get();
+        } else {
+            throw new ScreeningNotFoundException();
         }
     }
 

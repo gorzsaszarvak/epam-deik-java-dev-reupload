@@ -1,20 +1,16 @@
 package com.epam.training.ticketservice.cli.handler;
 
-import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class ScreeningCommandHandler extends AuthorityChecks {
+public class ScreeningCommandHandler extends HelperMethods {
 
     private final ScreeningService screeningService;
 
@@ -56,12 +52,5 @@ public class ScreeningCommandHandler extends AuthorityChecks {
         }
     }
 
-    private Date parseStartTime(String startTime) {
-        try {
-            Date date = new SimpleDateFormat("yyyy-mm-dd hh:mm").parse(startTime);
-            return date;
-        } catch (Exception exception) {
-            throw new RuntimeException("Invalid date format");
-        }
-    }
+
 }

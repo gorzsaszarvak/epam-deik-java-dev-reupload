@@ -21,9 +21,11 @@ public class Movie {
     @Id
     @GeneratedValue
     private long id;
-    @Column(unique = true)
+    @Column(name = "title", unique = true)
     private String title;
+    @Column(name = "genre")
     private String genre;
+    @Column(name = "length")
     private int length;
 
     public Movie(String title, String genre, int length) {

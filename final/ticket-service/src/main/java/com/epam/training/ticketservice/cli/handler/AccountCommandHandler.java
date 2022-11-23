@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.account.AccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +13,7 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class AccountCommandHandler extends AuthorityChecks {
+public class AccountCommandHandler extends HelperMethods {
 
     private final AccountService accountService;
 
