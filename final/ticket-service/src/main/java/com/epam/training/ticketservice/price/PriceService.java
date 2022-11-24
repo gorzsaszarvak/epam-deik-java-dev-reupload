@@ -1,16 +1,20 @@
 package com.epam.training.ticketservice.price;
 
 import com.epam.training.ticketservice.screening.persistence.Screening;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class PriceService {
+import java.util.Date;
 
-    private int basePrice = 1500;
+public interface PriceService {
 
-    public int getPrice(Screening screening, int numberOfSeats) {
-        return numberOfSeats * basePrice;
-    }
+    int getPrice(Screening screening, int numberOfSeats);
+
+    void updateBasePrice(int basePrice);
+
+    void createPriceComponent(String name, int amount);
+
+    void attachPriceComponentToMovie(String componentName, String movieTitle);
+
+    void attachPriceComponentToRoom(String componentName, String roomName);
+
+    void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName, Date startTime);
 }

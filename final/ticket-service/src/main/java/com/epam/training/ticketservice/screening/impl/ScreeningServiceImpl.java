@@ -80,17 +80,13 @@ public class ScreeningServiceImpl implements ScreeningService {
     }
 
     @Override
-    public Screening findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime) {
+    public Optional<Screening> findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime) {
         Optional<Screening> screening = screeningRepository.findScreeningByMovieAndRoomAndStartTime(
             movieRepository.findMovieByTitle(movieTitle).get(),
             roomRepository.findRoomByName(roomName).get(),
             startTime);
 
-        if (screening.isPresent()) {
-            return screening.get();
-        } else {
-            throw new ScreeningNotFoundException();
-        }
+        return screening;
     }
 
     private boolean timeFrameIsAvailable(Screening newScreening) {

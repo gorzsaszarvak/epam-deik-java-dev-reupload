@@ -4,6 +4,7 @@ import com.epam.training.ticketservice.screening.persistence.Screening;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface ScreeningService {
 
@@ -13,5 +14,5 @@ public interface ScreeningService {
 
     void deleteScreening(String movieTitle, String roomName, Date startTime);
 
-    Screening findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime);
+    Optional<Screening> findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime);
 }

@@ -9,6 +9,7 @@ import com.epam.training.ticketservice.room.persistence.RoomRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,5 +62,10 @@ public class RoomServiceImpl implements RoomService {
         } else {
             throw new RoomNotFoundException(name);
         }
+    }
+
+    @Override
+    public Optional<Room> findRoomByName(String name) {
+        return roomRepository.findRoomByName(name);
     }
 }

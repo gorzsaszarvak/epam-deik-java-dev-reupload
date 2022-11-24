@@ -1,6 +1,9 @@
 package com.epam.training.ticketservice.room;
 
+import com.epam.training.ticketservice.room.persistence.Room;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomService {
 
@@ -11,5 +14,7 @@ public interface RoomService {
     void updateRoom(String name, int rows, int columns);
 
     void deleteRoom(String name);
+
+    Optional<Room> findRoomByName(String name);
 
 }
