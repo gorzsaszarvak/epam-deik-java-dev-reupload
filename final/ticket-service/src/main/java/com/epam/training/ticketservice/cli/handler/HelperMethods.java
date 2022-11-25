@@ -41,7 +41,7 @@ public abstract class HelperMethods {
         Optional<Authentication> authentication =
             Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
         if (signedIn()) {
-            return Availability.unavailable(String.format("Already logged in as '%n'", authentication.get().getName()));
+            return Availability.unavailable(String.format("Already logged in as '%s'", authentication.get().getName()));
         } else {
             return Availability.available();
         }

@@ -32,27 +32,23 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking book(String movieTitle, String roomName, Date startTime, List<Seat> seats)
         throws SeatsAlreadyBookedException, SeatDoesNotExistException {
-        Optional<Screening>
-            screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
+        Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
 
-        if(screening.isPresent()) {
-            Booking booking = Booking.builder()
-                .account(
-                    accountService.findAccountByUsername(
-                        (SecurityContextHolder.getContext().getAuthentication().getName())))
-                .screening(screening.get())
-                .seats(seats)
-                .price(priceService.getPrice(screening.get(), seats.size()))
-                .build();
+        Booking booking = Booking.builder()
+            .account(
+                accountService.findAccountByUsername(
+                    (SecurityContextHolder.getContext().getAuthentication().getName())))
+            .screening(screening)
+            .seats(seats)
+            .price(priceService.getPrice(screening, seats.size()))
+            .build();
 
-            areSeatsAvailable(screening.get(), seats);
-            doSeatsExist(screening.get(), seats);
+        areSeatsAvailable(screening, seats);
+        doSeatsExist(screening, seats);
 
-            bookingRepository.save(booking);
-            return booking;
-        } else {
-            throw new ScreeningNotFoundException();
-        }
+        bookingRepository.save(booking);
+        return booking;
+
     }
 
     private void doSeatsExist(Screening screening, List<Seat> seats) throws SeatDoesNotExistException {

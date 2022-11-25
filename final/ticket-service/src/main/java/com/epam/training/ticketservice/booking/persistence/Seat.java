@@ -16,6 +16,6 @@ public class Seat {
 
     @Override
     public String toString() {
-        return String.format("(%r,%c)", row, column);
+        return String.format("%1$d,%2$d", row, column);
     }
 }

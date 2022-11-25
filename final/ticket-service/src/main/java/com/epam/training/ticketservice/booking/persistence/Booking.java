@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -38,7 +39,7 @@ public class Booking {
     @JoinColumn(name = "screening_id", referencedColumnName = "id")
     private Screening screening;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Seat> seats;
 
     @Column(name = "price")
@@ -48,7 +49,7 @@ public class Booking {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         List<String> seatList = new ArrayList<>();
-        seats.forEach(x -> seatList.add(String.format("(%d,%d)", x.getRow(), x.getColumn())));
+        seats.forEach(x -> seatList.add(String.format("(%$1d,%$2d)", x.getRow(), x.getColumn())));
 
         return sb.append("Seats ")
             .append(String.join(", ", seatList))

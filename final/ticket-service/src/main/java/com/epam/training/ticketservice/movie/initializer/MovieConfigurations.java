@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.movie.config;
+package com.epam.training.ticketservice.movie.initializer;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

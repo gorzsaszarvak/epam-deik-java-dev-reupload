@@ -1,25 +1,25 @@
-package com.epam.training.ticketservice.room.config;
+package com.epam.training.ticketservice.screening.initilaizer;
+
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Component
-@ConfigurationProperties(prefix = "rooms")
+@ConfigurationProperties(prefix = "screenings")
 @Data
 @Validated
-public class RoomConfigurations {
+public class ScreeningConfigurations {
+
+    @NotBlank
+    private String movieTitle;
 
     @NotBlank
     private String roomName;
 
-    @Min(1)
-    private int roomRows;
-
-    @Min(1)
-    private int roomColumns;
+    @NotBlank
+    private String startTime;
 }

@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.room.initializer;
 
-import com.epam.training.ticketservice.room.config.RoomConfigurations;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.room.persistence.RoomRepository;
 import lombok.RequiredArgsConstructor;

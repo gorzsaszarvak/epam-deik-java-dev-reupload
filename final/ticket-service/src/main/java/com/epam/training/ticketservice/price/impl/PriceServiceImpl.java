@@ -34,7 +34,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public int getPrice(Screening screening, int numberOfSeats) {
-        return numberOfSeats * basePrice;
+        return numberOfSeats * (basePrice + getPriceComponentsSum(screening));
     }
 
     @Override
@@ -100,22 +100,48 @@ public class PriceServiceImpl implements PriceService {
     public void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName,
                                                 Date startTime) {
         Optional<PriceComponent> priceComponent = priceComponentRepository.findPriceComponentByName(componentName);
-        Optional<Screening> screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
+        Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
         if (priceComponent.isPresent()) {
-            if (screening.isPresent()) {
-                List<Screening> screenings = priceComponent.get().getScreenings();
-                if (screenings == null) {
-                    screenings = new ArrayList<>();
-                }
-                screenings.add(screening.get());
-                priceComponent.get().setScreenings(screenings);
-                priceComponentRepository.save(priceComponent.get());
-            } else {
-                throw new RoomNotFoundException(roomName);
+            List<Screening> screenings = priceComponent.get().getScreenings();
+            if (screenings == null) {
+                screenings = new ArrayList<>();
             }
+            screenings.add(screening);
+            priceComponent.get().setScreenings(screenings);
+            priceComponentRepository.save(priceComponent.get());
         } else {
             throw new PriceComponentNotFoundException();
         }
+    }
+
+    private int getPriceComponentsSum(Screening screening) {
+        List<PriceComponent> priceComponents = priceComponentRepository.findAll();
+
+        int sum = 0;
+
+        Optional<PriceComponent> movieBonus = priceComponents.stream()
+            .filter(x -> x.getMovies().contains(screening.getMovie()))
+            .findAny();
+
+        Optional<PriceComponent> roomBonus = priceComponents.stream()
+            .filter(x -> x.getRooms().contains((screening.getRoom())))
+            .findAny();
+
+        Optional<PriceComponent> screeningBonus = priceComponents.stream()
+            .filter(x -> x.getScreenings().contains(screening))
+            .findAny();
+
+        if (movieBonus.isPresent()) {
+            sum += movieBonus.get().getAmount();
+        }
+        if (roomBonus.isPresent()) {
+            sum += roomBonus.get().getAmount();
+        }
+        if (screeningBonus.isPresent()) {
+            sum += screeningBonus.get().getAmount();
+        }
+
+        return sum;
 
     }
 

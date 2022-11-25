@@ -9,9 +9,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
+@Table(name = "rooms")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Room {
@@ -19,27 +21,23 @@ public class Room {
     @Id
     @GeneratedValue
     private long id;
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     @Column(name = "rows")
     private int rows;
     @Column(name = "columns")
     private int columns;
 
-    @Column(name = "seats")
-    private int seats = rows * columns;
-
     public Room(String name, int rows, int columns) {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
-        this.seats = rows * columns;
     }
 
     @Override
     public String toString() {
         return "Room " + name + " with "
-            + seats + " seats, "
+            + (rows * columns) + " seats, "
             + rows + " rows and "
             + columns + " columns";
     }

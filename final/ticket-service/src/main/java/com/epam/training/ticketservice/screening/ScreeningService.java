@@ -14,5 +14,5 @@ public interface ScreeningService {
 
     void deleteScreening(String movieTitle, String roomName, Date startTime);
 
-    Optional<Screening> findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime);
+    Screening findScreeningByTitleRoomStartTime(String movieTitle, String roomName, Date startTime);
 }
