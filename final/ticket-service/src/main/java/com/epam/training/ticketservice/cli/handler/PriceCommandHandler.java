@@ -18,7 +18,6 @@ public class PriceCommandHandler extends HelperMethods {
 
     private final PriceServiceImpl priceService;
     private final ScreeningService screeningService;
-    private Screening screening;
 
     @ShellMethod(value = "update base price 'price'", key = "update base price")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
@@ -27,7 +26,8 @@ public class PriceCommandHandler extends HelperMethods {
         return "Updated base price";
     }
 
-    @ShellMethod(value = "create price component 'componentName' 'amount'", key = "create price component")
+    @ShellMethod(value = "create price component 'componentName' 'amount'",
+        key = "create price component")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String createPriceComponent(String componentName, int amount) {
         try {
@@ -38,7 +38,8 @@ public class PriceCommandHandler extends HelperMethods {
         }
     }
 
-    @ShellMethod(value = "attach price component to movie 'componentName' 'movieTitle'", key = "attach price component to movie")
+    @ShellMethod(value = "attach price component to movie 'componentName' 'movieTitle'",
+        key = "attach price component to movie")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String attachPriceComponentToMovie(String componentName, String movieTitle) {
         try {
@@ -49,7 +50,8 @@ public class PriceCommandHandler extends HelperMethods {
         }
     }
 
-    @ShellMethod(value = "attach price component to room 'componentName' 'roomName'", key = "attach price component to room")
+    @ShellMethod(value = "attach price component to room 'componentName' 'roomName'",
+        key = "attach price component to room")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String attachPriceComponentToRoom(String componentName, String roomName) {
         try {
@@ -61,7 +63,8 @@ public class PriceCommandHandler extends HelperMethods {
     }
 
 
-    @ShellMethod(value = "attach price component to screening 'componentName' 'movieTitle' 'roomName' 'startTime'", key = "attach price component to screening")
+    @ShellMethod(value = "attach price component to screening 'componentName' 'movieTitle' 'roomName' 'startTime'",
+        key = "attach price component to screening")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
     public String attachPriceComponentToRoom(String componentName, String movieTitle, String roomName,
                                              String startTimeString) {
@@ -74,7 +77,8 @@ public class PriceCommandHandler extends HelperMethods {
         }
     }
 
-    @ShellMethod(value = "show price for 'movieTitle' 'roomName' 'startTime' 'seats'", key = "show price for")
+    @ShellMethod(value = "show price for 'movieTitle' 'roomName' 'startTime' 'seats'",
+        key = "show price for")
     public String showPriceFor(String movieTitle, String roomName, String startTimeString, String seatsString) {
         try {
             Date startTime = parseStartTime(startTimeString);

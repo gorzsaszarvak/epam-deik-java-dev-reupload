@@ -24,13 +24,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<String> listMoviesAsString() {
-        List<String> moviesAsString = Stream.of(movieRepository.findAll())
-            .map(x -> x.toString())
-            .collect(Collectors.toList());
-
-        if (!moviesAsString.isEmpty()) {
-            return moviesAsString;
+    public List<Movie> listMovies() throws NoMoviesFoundException {
+        List<Movie> movies = movieRepository.findAll();
+        if (!movies.isEmpty()) {
+            return movies;
         } else {
             throw new NoMoviesFoundException();
         }
@@ -38,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void createMovie(String title, String genre, int movieLength) {
-        if (!movieRepository.findMovieByTitle(title).isPresent()) {
+        if (!movieRepository.existsByTitle(title)) {
             movieRepository.save(new Movie(title, genre, movieLength));
         } else {
             throw new MovieAlreadyExistsException(title);
@@ -47,8 +44,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void updateMovie(String title, String genre, int movieLength) {
-        if (movieRepository.findMovieByTitle(title).isPresent()) {
-            movieRepository.delete(movieRepository.findMovieByTitle(title).get());
+        if (movieRepository.existsByTitle(title)) {
+            movieRepository.deleteByTitle(title);
             createMovie(title, genre, movieLength);
         } else {
             throw new MovieNotFoundException(title);
@@ -57,16 +54,22 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(String title) {
-        if (movieRepository.findMovieByTitle(title).isPresent()) {
-            movieRepository.delete(movieRepository.findMovieByTitle(title).get());
+        if (movieRepository.existsByTitle(title)) {
+            movieRepository.deleteByTitle(title);
         } else {
             throw new MovieNotFoundException(title);
         }
     }
 
     @Override
-    public Optional<Movie> findMovieByTitle(String title) {
-        return movieRepository.findMovieByTitle(title);
+    public Movie findMovieByTitle(String title) {
+        Optional<Movie> movie = movieRepository.findMovieByTitle(title);
+        if (movie.isPresent()) {
+            return movie.get();
+        } else {
+            throw new MovieNotFoundException(title);
+        }
+
     }
 
 

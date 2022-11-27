@@ -12,6 +12,7 @@ import com.epam.training.ticketservice.room.RoomService;
 import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.screening.ScreeningService;
+import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -56,62 +57,50 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public void attachPriceComponentToMovie(String componentName, String movieTitle) {
-        Optional<PriceComponent> priceComponent = priceComponentRepository.findPriceComponentByName(componentName);
-        Optional<Movie> movie = movieService.findMovieByTitle(movieTitle);
-        if (priceComponent.isPresent()) {
-            if (movie.isPresent()) {
-                List<Movie> movies = priceComponent.get().getMovies();
-                if (movies == null) {
-                    movies = new ArrayList<>();
-                }
-                movies.add(movie.get());
-                priceComponent.get().setMovies(movies);
-                priceComponentRepository.save(priceComponent.get());
-            } else {
-                throw new MovieNotFoundException(movieTitle);
-            }
-        } else {
-            throw new PriceComponentNotFoundException();
+
+        PriceComponent priceComponent = findPriceComponentByName(componentName);
+        Movie movie = movieService.findMovieByTitle(movieTitle);
+
+        List<Movie> movies = priceComponent.getMovies();
+        if (movies == null) {
+            movies = new ArrayList<>();
         }
+        movies.add(movie);
+        priceComponent.setMovies(movies);
+        priceComponentRepository.save(priceComponent);
+
     }
 
     @Override
-    public void attachPriceComponentToRoom(String componentName, String roomName) {
-        Optional<PriceComponent> priceComponent = priceComponentRepository.findPriceComponentByName(componentName);
-        Optional<Room> room = roomService.findRoomByName(roomName);
-        if (priceComponent.isPresent()) {
-            if (room.isPresent()) {
-                List<Room> rooms = priceComponent.get().getRooms();
-                if (rooms == null) {
-                    rooms = new ArrayList<>();
-                }
-                rooms.add(room.get());
-                priceComponent.get().setRooms(rooms);
-                priceComponentRepository.save(priceComponent.get());
-            } else {
-                throw new RoomNotFoundException(roomName);
-            }
-        } else {
-            throw new PriceComponentNotFoundException();
+    public void attachPriceComponentToRoom(String componentName, String roomName)
+        throws PriceComponentNotFoundException, RoomNotFoundException {
+        PriceComponent priceComponent = findPriceComponentByName(componentName);
+        Room room = roomService.findRoomByName(roomName);
+        List<Room> rooms = priceComponent.getRooms();
+        if (rooms == null) {
+            rooms = new ArrayList<>();
         }
+        rooms.add(room);
+        priceComponent.setRooms(rooms);
+        priceComponentRepository.save(priceComponent);
     }
 
     @Override
     public void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName,
-                                                Date startTime) {
-        Optional<PriceComponent> priceComponent = priceComponentRepository.findPriceComponentByName(componentName);
+                                                Date startTime)
+        throws ScreeningNotFoundException, PriceComponentNotFoundException {
+
+        PriceComponent priceComponent = findPriceComponentByName(componentName);
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
-        if (priceComponent.isPresent()) {
-            List<Screening> screenings = priceComponent.get().getScreenings();
-            if (screenings == null) {
-                screenings = new ArrayList<>();
-            }
-            screenings.add(screening);
-            priceComponent.get().setScreenings(screenings);
-            priceComponentRepository.save(priceComponent.get());
-        } else {
-            throw new PriceComponentNotFoundException();
+
+        List<Screening> screenings = priceComponent.getScreenings();
+        if (screenings == null) {
+            screenings = new ArrayList<>();
         }
+
+        screenings.add(screening);
+        priceComponent.setScreenings(screenings);
+        priceComponentRepository.save(priceComponent);
     }
 
     private int getPriceComponentsSum(Screening screening) {
@@ -142,7 +131,16 @@ public class PriceServiceImpl implements PriceService {
         }
 
         return sum;
+    }
 
+    @Override
+    public PriceComponent findPriceComponentByName(String componentName) throws PriceComponentNotFoundException {
+        Optional<PriceComponent> priceComponent = priceComponentRepository.findPriceComponentByName(componentName);
+        if (priceComponent.isPresent()) {
+            return priceComponent.get();
+        } else {
+            throw new PriceComponentNotFoundException();
+        }
     }
 
 

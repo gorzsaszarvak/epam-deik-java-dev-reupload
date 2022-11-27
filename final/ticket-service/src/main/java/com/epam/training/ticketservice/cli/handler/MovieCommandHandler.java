@@ -1,12 +1,14 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.movie.MovieService;
+import com.epam.training.ticketservice.movie.persistence.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -52,7 +54,9 @@ public class MovieCommandHandler extends HelperMethods {
     @ShellMethod(value = "List movies", key = "list movies")
     public String listMovies() {
         try {
-            List<String> moviesAsString = movieService.listMoviesAsString();
+            List<String> moviesAsString = movieService.listMovies().stream()
+                .map(Movie::toString)
+                .collect(Collectors.toList());
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String movie : moviesAsString) {

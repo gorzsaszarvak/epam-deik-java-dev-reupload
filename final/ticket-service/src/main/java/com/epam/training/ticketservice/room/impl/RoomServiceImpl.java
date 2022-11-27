@@ -65,7 +65,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Optional<Room> findRoomByName(String name) {
-        return roomRepository.findRoomByName(name);
+    public Room findRoomByName(String name) throws RoomNotFoundException {
+        Optional<Room> room = roomRepository.findRoomByName(name);
+        if (room.isPresent()) {
+            return room.get();
+        } else {
+            throw new RoomNotFoundException(name);
+        }
     }
 }

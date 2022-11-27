@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findAccountByUsername(String username) {
-        var account = accountRepository.findAccountByUsername(username);
+        Optional<Account> account = accountRepository.findAccountByUsername(username);
         if (account.isPresent()) {
             return account.get();
         } else {

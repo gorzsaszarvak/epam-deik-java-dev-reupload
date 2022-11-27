@@ -15,6 +15,6 @@ public interface RoomService {
 
     void deleteRoom(String name);
 
-    Optional<Room> findRoomByName(String name);
+    Room findRoomByName(String name);
 
 }
