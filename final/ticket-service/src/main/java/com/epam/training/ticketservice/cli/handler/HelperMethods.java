@@ -1,14 +1,15 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.booking.persistence.Seat;
+import net.bytebuddy.asm.Advice;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.Availability;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,10 +59,10 @@ public abstract class HelperMethods {
             .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
     }
 
-    protected Date parseStartTime(String startTime) {
+    protected LocalDateTime parseStartTime(String startTime) {
         try {
-            Date date = new SimpleDateFormat("yyyy-mm-dd hh:mm").parse(startTime);
-            return date;
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            return LocalDateTime.parse(startTime, format);
         } catch (Exception exception) {
             throw new RuntimeException("Invalid date format");
         }

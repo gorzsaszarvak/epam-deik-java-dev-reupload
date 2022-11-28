@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.screening.ScreeningService;
+import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -40,13 +41,10 @@ public class ScreeningCommandHandler extends HelperMethods {
     @ShellMethod(value = "List screenings", key = "list screenings")
     public String listScreenings() {
         try {
-            List<String> screeningsAsString = screeningService.listScreenings();
-
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String screening : screeningsAsString) {
-                stringBuilder.append(screening).append(System.lineSeparator());
-            }
-            return stringBuilder.toString();
+            screeningService.listScreenings().stream()
+                .map(Screening::toString)
+                .forEach(System.out::println);
+            return null;
         } catch (Exception exception) {
             return "There are no screenings at the moment";
         }

@@ -6,31 +6,38 @@ import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistExcepti
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.BookingRepository;
+import com.epam.training.ticketservice.price.PriceService;
 import com.epam.training.ticketservice.price.impl.PriceServiceImpl;
 import com.epam.training.ticketservice.booking.persistence.Seat;
+import com.epam.training.ticketservice.room.RoomService;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    private AccountService accountService;
-    private ScreeningService screeningService;
-    private PriceServiceImpl priceService;
+
+    private final AccountService accountService;
+
+    private final ScreeningService screeningService;
+
+    private final PriceService priceService;
+
     private final BookingRepository bookingRepository;
 
     @Override
-    public Booking book(String movieTitle, String roomName, Date startTime, List<Seat> seats)
+    public Booking book(String movieTitle, String roomName, LocalDateTime startTime, List<Seat> seats)
         throws SeatsAlreadyBookedException, SeatDoesNotExistException {
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
 
@@ -63,11 +70,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void areSeatsAvailable(Screening screening, List<Seat> seats) throws SeatsAlreadyBookedException {
-        List<Seat> alreadyBookedSeats =
-            bookingRepository.findBookingByScreening(screening).getSeats().stream().filter(seats::contains).collect(
-                Collectors.toList());
-        if (alreadyBookedSeats.size() != 0) {
-            throw new SeatsAlreadyBookedException(alreadyBookedSeats.get(0).toString());
+        List<Seat> overlap = bookingRepository.findBookingsByScreening(screening).stream()
+            .map(Booking::getSeats)
+            .flatMap(List::stream)
+            .filter(seats::contains)
+            .collect(Collectors.toList());
+
+        List<String> overlapAsStrings = overlap.stream()
+            .map(Seat::toString)
+            .collect(Collectors.toList());
+
+        if(!overlap.isEmpty()){
+            throw new SeatsAlreadyBookedException(String.join(", ", overlapAsStrings));
         }
     }
 }

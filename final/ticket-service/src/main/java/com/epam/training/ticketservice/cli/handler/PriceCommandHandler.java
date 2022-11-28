@@ -9,7 +9,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ShellComponent
@@ -69,7 +69,7 @@ public class PriceCommandHandler extends HelperMethods {
     public String attachPriceComponentToRoom(String componentName, String movieTitle, String roomName,
                                              String startTimeString) {
         try {
-            Date startTime = parseStartTime(startTimeString);
+            LocalDateTime startTime = parseStartTime(startTimeString);
             priceService.attachPriceComponentToScreening(componentName, movieTitle, roomName, startTime);
             return "Price component attached to screening";
         } catch (Exception exception) {
@@ -81,7 +81,7 @@ public class PriceCommandHandler extends HelperMethods {
         key = "show price for")
     public String showPriceFor(String movieTitle, String roomName, String startTimeString, String seatsString) {
         try {
-            Date startTime = parseStartTime(startTimeString);
+            LocalDateTime startTime = parseStartTime(startTimeString);
             List<Seat> seats = parseSeats(seatsString);
             Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
             int price = priceService.getPrice(screening, seats.size());

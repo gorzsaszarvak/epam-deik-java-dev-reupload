@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.cli;
 
-import org.springframework.shell.Availability;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 

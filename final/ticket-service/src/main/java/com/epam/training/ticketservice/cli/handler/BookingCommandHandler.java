@@ -10,7 +10,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ShellComponent
@@ -23,7 +23,7 @@ public class BookingCommandHandler extends HelperMethods {
     @ShellMethodAvailability(value = "loggedInAsUser")
     public String book(final String movieTitle, final String roomName, final String startTimeString,
                        final String seatsString) {
-        Date startTime = parseStartTime(startTimeString);
+        LocalDateTime startTime = parseStartTime(startTimeString);
         List<Seat> seats = parseSeats(seatsString);
         try {
             Booking booking = bookingService.book(movieTitle, roomName, startTime, seats);

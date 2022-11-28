@@ -5,11 +5,11 @@ import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedExcep
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.Seat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingService {
 
-    Booking book(String movieTitle, String roomName, Date startTime, List<Seat> seats)
+    Booking book(String movieTitle, String roomName, LocalDateTime startTime, List<Seat> seats)
         throws SeatsAlreadyBookedException, SeatDoesNotExistException;
 }

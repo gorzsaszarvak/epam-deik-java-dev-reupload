@@ -26,7 +26,7 @@ public class Account {
     @Id
     @GeneratedValue
     private long id;
-    @Column(name = "user_name")
+    @Column(name = "username")
     private String username;
     @Column(name = "password")
     private String password;

@@ -23,20 +23,18 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<String> listRoomsAsString() {
-        List<String> roomsAsString = Stream.of(roomRepository.findAll())
-            .map(x -> x.toString())
-            .collect(Collectors.toList());
-        if (!roomsAsString.isEmpty()) {
-            return roomsAsString;
+    public List<Room> listRooms() throws NoRoomsFoundException {
+        List<Room> rooms = roomRepository.findAll();
+        if (!rooms.isEmpty()) {
+            return rooms;
         } else {
             throw new NoRoomsFoundException();
         }
     }
 
     @Override
-    public void createRoom(String name, int rows, int columns) {
-        if (!roomRepository.findRoomByName(name).isPresent()) {
+    public void createRoom(String name, int rows, int columns) throws RoomAlreadyExistsException {
+        if (!roomRepository.existsByName(name)) {
             roomRepository.save(new Room(name, rows, columns));
         } else {
             throw new RoomAlreadyExistsException(name);
@@ -45,23 +43,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void updateRoom(String name, int rows, int columns) {
-        if (roomRepository.findRoomByName(name).isPresent()) {
-            roomRepository.delete(roomRepository.findRoomByName(name).get());
-            createRoom(name, rows, columns);
-        } else {
-            throw new RoomNotFoundException(name);
-        }
+    public void updateRoom(String name, int rows, int columns) throws RoomNotFoundException {
+        roomRepository.delete(findRoomByName(name));
+        roomRepository.save(new Room(name, rows, columns));
+
 
     }
 
     @Override
-    public void deleteRoom(String name) {
-        if (roomRepository.findRoomByName(name).isPresent()) {
-            roomRepository.delete(roomRepository.findRoomByName(name).get());
-        } else {
-            throw new RoomNotFoundException(name);
-        }
+    public void deleteRoom(String name) throws RoomNotFoundException {
+        roomRepository.delete(findRoomByName(name));
     }
 
     @Override

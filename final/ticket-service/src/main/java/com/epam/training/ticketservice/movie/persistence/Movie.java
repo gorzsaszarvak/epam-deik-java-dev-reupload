@@ -1,6 +1,8 @@
 package com.epam.training.ticketservice.movie.persistence;
 
 
+import com.epam.training.ticketservice.price.persistence.PriceComponent;
+import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,6 +34,12 @@ public class Movie {
     private String genre;
     @Column(name = "length")
     private int length;
+
+    @ManyToOne
+    private PriceComponent priceComponent;
+
+//    @OneToMany(mappedBy = "movie")
+//    private List<Screening> screenings;
 
     public Movie(String title, String genre, int length) {
         this.title = title;

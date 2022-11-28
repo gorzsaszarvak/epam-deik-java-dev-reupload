@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
@@ -49,18 +51,18 @@ class MovieServiceTest {
         when(movieRepository.findAll()).thenReturn(expected);
         List<Movie> actual = movieService.listMovies();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testListMoviesThrowsExceptionWhenNoMoviesAreSaved() {
         when(movieRepository.findAll()).thenReturn(Collections.emptyList());
 
-        Assertions.assertThrows(NoMoviesFoundException.class, () -> movieService.listMovies());
+        assertThrows(NoMoviesFoundException.class, () -> movieService.listMovies());
     }
 
     @Test
-    void testCreateMovieSavesMovieOnce() {
+    void testCreateMovie() {
         movieService.createMovie(testMovie.getTitle(), testMovie.getGenre(), testMovie.getLength());
 
         verify(movieRepository, times(1)).save(testMovie);
@@ -70,7 +72,7 @@ class MovieServiceTest {
     void testCreateMovieDoesntSaveMovieIfItAlreadyExists() {
         when(movieRepository.existsByTitle(anyString())).thenReturn(true);
 
-        Assertions.assertThrows(MovieAlreadyExistsException.class,
+        assertThrows(MovieAlreadyExistsException.class,
             () -> movieService.createMovie(testMovie.getTitle(), testMovie.getGenre(), testMovie.getLength()));
         verify(movieRepository, times(0)).save(any());
     }
@@ -79,7 +81,7 @@ class MovieServiceTest {
     void updateMovieDoesntSaveWhenMovieDoesntExist() {
         when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(false);
 
-        Assertions.assertThrows(MovieNotFoundException.class,
+        assertThrows(MovieNotFoundException.class,
             () -> movieService.updateMovie(testMovie.getTitle(), testMovie.getGenre(), testMovie.getLength()));
         verify(movieRepository, times(0)).delete(any());
         verify(movieRepository, times(0)).save(any());
@@ -97,7 +99,7 @@ class MovieServiceTest {
     void testDeleteMovieThrowsExceptionIfTheMovieDoesntExist() {
         when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(false);
 
-        Assertions.assertThrows(MovieNotFoundException.class, () -> movieService.deleteMovie(testMovie.getTitle()));
+        assertThrows(MovieNotFoundException.class, () -> movieService.deleteMovie(testMovie.getTitle()));
         verify(movieRepository, times(0)).delete(any());
     }
 
@@ -106,14 +108,14 @@ class MovieServiceTest {
         when(movieRepository.findMovieByTitle(testMovie.getTitle())).thenReturn(Optional.ofNullable(testMovie));
         Movie returnedMovie = movieService.findMovieByTitle(testMovie.getTitle());
 
-        Assertions.assertEquals(testMovie, returnedMovie);
+        assertEquals(testMovie, returnedMovie);
     }
 
     @Test
     void findMovieByTitleThrowsExceptionWhenMovieDoesntExist() {
         when(movieRepository.findMovieByTitle(testMovie.getTitle())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(MovieNotFoundException.class,
+        assertThrows(MovieNotFoundException.class,
             () -> movieService.findMovieByTitle(testMovie.getTitle()));
     }
 }

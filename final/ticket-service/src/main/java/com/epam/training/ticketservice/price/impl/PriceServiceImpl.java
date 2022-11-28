@@ -16,13 +16,14 @@ import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundExce
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class PriceServiceImpl implements PriceService {
 
@@ -87,7 +88,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName,
-                                                Date startTime)
+                                                LocalDateTime startTime)
         throws ScreeningNotFoundException, PriceComponentNotFoundException {
 
         PriceComponent priceComponent = findPriceComponentByName(componentName);

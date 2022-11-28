@@ -3,7 +3,7 @@ package com.epam.training.ticketservice.price;
 import com.epam.training.ticketservice.price.persistence.PriceComponent;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface PriceService {
 
@@ -17,7 +17,7 @@ public interface PriceService {
 
     void attachPriceComponentToRoom(String componentName, String roomName);
 
-    void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName, Date startTime);
+    void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName, LocalDateTime startTime);
 
     PriceComponent findPriceComponentByName(String componentName);
 }

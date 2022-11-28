@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -32,16 +32,16 @@ public class Screening {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
     @Column(name = "start_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time")
-    private Date endTime;
+    private LocalDateTime endTime;
 
-    public Screening(Movie movie, Room room, Date screeningTime) {
+    public Screening(Movie movie, Room room, LocalDateTime screeningTime) {
         this.movie = movie;
         this.room = room;
         this.startTime = screeningTime;
-        this.endTime = new Date(startTime.getTime() + (movie.getLength() * 60000L));
+        this.endTime = startTime.plusMinutes(movie.getLength());
     }
 
     @Override

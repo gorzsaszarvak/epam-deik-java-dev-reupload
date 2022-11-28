@@ -1,12 +1,14 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.room.RoomService;
+import com.epam.training.ticketservice.room.persistence.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -51,7 +53,9 @@ public class RoomCommandHandler extends HelperMethods {
     @ShellMethod(value = "List rooms", key = "list rooms")
     public String listRooms() {
         try {
-            List<String> roomsAsString = roomService.listRoomsAsString();
+            List<String> roomsAsString = roomService.listRooms().stream()
+                .map(Room::toString)
+                .collect(Collectors.toList());
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String room : roomsAsString) {

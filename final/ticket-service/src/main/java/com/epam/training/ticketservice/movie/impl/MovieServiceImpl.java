@@ -6,22 +6,20 @@ import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
 import com.epam.training.ticketservice.movie.exception.NoMoviesFoundException;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.movie.persistence.MovieRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
-
-    @Autowired
-    public MovieServiceImpl(final MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
-    }
 
     @Override
     public List<Movie> listMovies() throws NoMoviesFoundException {
