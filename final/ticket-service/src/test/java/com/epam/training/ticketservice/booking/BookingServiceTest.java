@@ -64,8 +64,6 @@ class BookingServiceTest {
     @Mock
     PriceService priceService;
 
-    private Booking testBooking;
-
     private Screening testScreening;
 
     private Movie testMovie;
@@ -108,7 +106,7 @@ class BookingServiceTest {
         when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
             any(LocalDateTime.class))).thenReturn(testScreening);
         when(accountService.findAccountByUsername(anyString())).thenReturn(testAccount);
-        when(priceService.getPrice(any(Screening.class), anyInt())).thenReturn(1000);
+        when(priceService.getPrice(anyString(), anyString(), any(LocalDateTime.class), anyInt())).thenReturn(1000);
 
         bookingService.book("title", "room", LocalDateTime.now(), testSeats);
 

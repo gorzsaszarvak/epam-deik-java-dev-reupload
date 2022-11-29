@@ -43,7 +43,8 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void updateMovie(String title, String genre, int movieLength) {
         if (movieRepository.existsByTitle(title)) {
-            movieRepository.deleteByTitle(title);
+            Movie movie = movieRepository.findMovieByTitle(title).get();
+            movieRepository.delete(movie);
             createMovie(title, genre, movieLength);
         } else {
             throw new MovieNotFoundException(title);
@@ -53,7 +54,8 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void deleteMovie(String title) {
         if (movieRepository.existsByTitle(title)) {
-            movieRepository.deleteByTitle(title);
+            Movie movie = findMovieByTitle(title);
+            movieRepository.delete(movie);
         } else {
             throw new MovieNotFoundException(title);
         }

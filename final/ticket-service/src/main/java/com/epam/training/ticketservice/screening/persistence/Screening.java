@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.screening.persistence;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.room.persistence.Room;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
 @Table(name = "screenings")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Screening {
@@ -46,8 +49,10 @@ public class Screening {
 
     @Override
     public String toString() {
+        String pattern = "yyyy-MM-dd HH:mm";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return movie.toString()
             + ", screened in room " + room.getName()
-            + ", at " + startTime;
+            + ", at " + startTime.format(formatter);
     }
 }

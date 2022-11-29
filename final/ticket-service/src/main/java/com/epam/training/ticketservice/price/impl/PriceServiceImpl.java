@@ -15,7 +15,6 @@ import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,7 +34,8 @@ public class PriceServiceImpl implements PriceService {
     private int basePrice = 1500;
 
     @Override
-    public int getPrice(Screening screening, int numberOfSeats) {
+    public int getPrice(String movieTitle, String roomName, LocalDateTime startTime, int numberOfSeats) {
+        Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
         return numberOfSeats * (basePrice + getPriceComponentsSum(screening));
     }
 

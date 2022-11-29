@@ -21,9 +21,9 @@ public class RoomCommandHandler extends HelperMethods {
     public String createRoom(final String name, final int rows, final int columns) {
         try {
             roomService.createRoom(name, rows, columns);
-            return "Created room with name: " + name;
+            return "Room created";
         } catch (Exception exception) {
-            return "Could not create room, reason: " + exception.getMessage();
+            return "Could not create room: " + exception.getMessage();
         }
     }
 
@@ -32,9 +32,9 @@ public class RoomCommandHandler extends HelperMethods {
     public String updateRoom(final String name, final int rows, final int columns) {
         try {
             roomService.updateRoom(name, rows, columns);
-            return "Updated room with name: " + name;
+            return "Room updated";
         } catch (Exception exception) {
-            return "Could not update room, reason:" + exception.getMessage();
+            return "Could not update room: " + exception.getMessage();
         }
     }
 
@@ -43,25 +43,19 @@ public class RoomCommandHandler extends HelperMethods {
     public String deleteRoom(final String name) {
         try {
             roomService.deleteRoom(name);
-            return "Deleted room with name: " + name;
+            return "Room deleted";
         } catch (Exception exception) {
-            return "Could not delete movie, reason: " + exception.getMessage();
+            return "Could not delete room: " + exception.getMessage();
         }
     }
 
-    //TODO(can't print in separate lines)
     @ShellMethod(value = "List rooms", key = "list rooms")
     public String listRooms() {
         try {
-            List<String> roomsAsString = roomService.listRooms().stream()
+            roomService.listRooms().stream()
                 .map(Room::toString)
-                .collect(Collectors.toList());
-
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String room : roomsAsString) {
-                stringBuilder.append(room).append(System.lineSeparator());
-            }
-            return stringBuilder.toString();
+                .forEach(System.out::println);
+            return null;
         } catch (Exception exception) {
             return "There are no rooms at the moment";
         }

@@ -58,25 +58,22 @@ class ScreeningServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.startTime = LocalDateTime.of(LocalDate.of(2020, 01, 01), LocalTime.of(10, 0));
-        this.testMovie = new Movie(
+        startTime = LocalDateTime.now();
+        testMovie = new Movie(
             "title",
             "genre",
             100
         );
-        this.testRoom = new Room(
+        testRoom = new Room(
             "name",
             10,
             10
         );
-        this.testScreening = new Screening(
-            this.testMovie,
-            this.testRoom,
-            this.startTime
+        testScreening = new Screening(
+            testMovie,
+            testRoom,
+            startTime
         );
-
-//        movieService.createMovie(testMovie.getTitle(), testMovie.getGenre(), testMovie.getLength());
-//        roomService.createRoom(testRoom.getName(), testRoom.getRows(), testRoom.getColumns());
     }
 
     @Test

@@ -41,14 +41,12 @@ public class BookingServiceImpl implements BookingService {
         throws SeatsAlreadyBookedException, SeatDoesNotExistException {
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
 
-        Booking booking = Booking.builder()
-            .account(
-                accountService.findAccountByUsername(
-                    (SecurityContextHolder.getContext().getAuthentication().getName())))
-            .screening(screening)
-            .seats(seats)
-            .price(priceService.getPrice(screening, seats.size()))
-            .build();
+        Booking booking = Booking.builder().account(
+                accountService.findAccountByUsername((SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getName())))
+            .screening(screening).seats(seats)
+            .price(priceService.getPrice(movieTitle, roomName, startTime, seats.size())).build();
 
         areSeatsAvailable(screening, seats);
         doSeatsExist(screening, seats);
@@ -70,17 +68,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void areSeatsAvailable(Screening screening, List<Seat> seats) throws SeatsAlreadyBookedException {
-        List<Seat> overlap = bookingRepository.findBookingsByScreening(screening).stream()
-            .map(Booking::getSeats)
-            .flatMap(List::stream)
-            .filter(seats::contains)
-            .collect(Collectors.toList());
+        List<Seat> overlap =
+            bookingRepository.findBookingsByScreening(screening).stream()
+                .map(Booking::getSeats)
+                .flatMap(List::stream)
+                .filter(seats::contains)
+                .collect(Collectors.toList());
 
         List<String> overlapAsStrings = overlap.stream()
             .map(Seat::toString)
             .collect(Collectors.toList());
 
-        if(!overlap.isEmpty()){
+        if (!overlap.isEmpty()) {
             throw new SeatsAlreadyBookedException(String.join(", ", overlapAsStrings));
         }
     }

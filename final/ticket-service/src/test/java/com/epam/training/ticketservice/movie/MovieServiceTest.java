@@ -89,10 +89,11 @@ class MovieServiceTest {
 
     @Test
     void testDeleteMovieDeletesMovieIfItExists() {
-        when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(true);
+        when(movieRepository.existsByTitle(anyString())).thenReturn(true);
+        when(movieRepository.findMovieByTitle(anyString())).thenReturn(Optional.of(testMovie));
         movieService.deleteMovie(testMovie.getTitle());
 
-        verify(movieRepository, times(1)).deleteByTitle(testMovie.getTitle());
+        verify(movieRepository, times(1)).delete(any(Movie.class));
     }
 
     @Test
@@ -104,7 +105,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void findMovieByTitleReturnsMovieIfItExists() {
+    void testFindMovieByTitleReturnsMovieIfItExists() {
         when(movieRepository.findMovieByTitle(testMovie.getTitle())).thenReturn(Optional.ofNullable(testMovie));
         Movie returnedMovie = movieService.findMovieByTitle(testMovie.getTitle());
 
@@ -112,7 +113,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void findMovieByTitleThrowsExceptionWhenMovieDoesntExist() {
+    void testFindMovieByTitleThrowsExceptionWhenMovieDoesntExist() {
         when(movieRepository.findMovieByTitle(testMovie.getTitle())).thenReturn(Optional.empty());
 
         assertThrows(MovieNotFoundException.class,

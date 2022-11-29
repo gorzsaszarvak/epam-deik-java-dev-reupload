@@ -50,19 +50,13 @@ public class MovieCommandHandler extends HelperMethods {
         }
     }
 
-    //TODO(can't print in separate lines)
     @ShellMethod(value = "List movies", key = "list movies")
     public String listMovies() {
         try {
-            List<String> moviesAsString = movieService.listMovies().stream()
+            movieService.listMovies().stream()
                 .map(Movie::toString)
-                .collect(Collectors.toList());
-
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String movie : moviesAsString) {
-                stringBuilder.append(movie).append(System.lineSeparator());
-            }
-            return stringBuilder.toString();
+                .forEach(System.out::println);
+            return null;
         } catch (Exception exception) {
             return "There are no movies at the moment";
         }

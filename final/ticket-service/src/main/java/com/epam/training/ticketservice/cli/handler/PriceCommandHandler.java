@@ -1,9 +1,7 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.booking.persistence.Seat;
-import com.epam.training.ticketservice.price.impl.PriceServiceImpl;
-import com.epam.training.ticketservice.screening.ScreeningService;
-import com.epam.training.ticketservice.screening.persistence.Screening;
+import com.epam.training.ticketservice.price.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -16,8 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PriceCommandHandler extends HelperMethods {
 
-    private final PriceServiceImpl priceService;
-    private final ScreeningService screeningService;
+    private final PriceService priceService;
 
     @ShellMethod(value = "update base price 'price'", key = "update base price")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
@@ -66,7 +63,7 @@ public class PriceCommandHandler extends HelperMethods {
     @ShellMethod(value = "attach price component to screening 'componentName' 'movieTitle' 'roomName' 'startTime'",
         key = "attach price component to screening")
     @ShellMethodAvailability(value = "loggedInAsAdmin")
-    public String attachPriceComponentToRoom(String componentName, String movieTitle, String roomName,
+    public String attachPriceComponentToScreening(String componentName, String movieTitle, String roomName,
                                              String startTimeString) {
         try {
             LocalDateTime startTime = parseStartTime(startTimeString);
@@ -83,8 +80,7 @@ public class PriceCommandHandler extends HelperMethods {
         try {
             LocalDateTime startTime = parseStartTime(startTimeString);
             List<Seat> seats = parseSeats(seatsString);
-            Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
-            int price = priceService.getPrice(screening, seats.size());
+            int price = priceService.getPrice(movieTitle, roomName, startTime, seats.size());
             return String.format("The price for this booking would be %d HUF", price);
         } catch (Exception exception) {
             return exception.getMessage();

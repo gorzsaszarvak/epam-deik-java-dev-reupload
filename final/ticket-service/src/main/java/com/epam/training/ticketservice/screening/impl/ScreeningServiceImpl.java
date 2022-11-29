@@ -90,13 +90,11 @@ public class ScreeningServiceImpl implements ScreeningService {
         for (Screening screening : screeningRepository.findAll()) {
             if (newScreening.getStartTime().isBefore(screening.getEndTime())
                 && newScreening.getEndTime().isAfter(screening.getStartTime())) {
+                throw new TimeFrameNotAvailableException();
 
-                throw new TimeFrameNotAvailableException(newScreening);
-
-            } else if (newScreening.getEndTime().isBefore(screening.getEndTime().plusMinutes(10))
+            } else if (newScreening.getStartTime().isBefore(screening.getEndTime().plusMinutes(10))
                 && newScreening.getEndTime().isAfter(screening.getEndTime())) {
-
-                throw new ScreeningOverlapsBreakException(newScreening);
+                throw new ScreeningOverlapsBreakException();
             }
         }
         return true;

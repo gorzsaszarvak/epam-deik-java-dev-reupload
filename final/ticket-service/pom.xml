@@ -209,6 +209,17 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <exclude>com/epam/training/ticketservice/account/persistence/Account.class</exclude>
+                                <exclude>com/epam/training/ticketservice/account/persistence/Role.class</exclude>
+                                <exclude>com/epam/training/ticketservice/booking/persistence/Booking.class</exclude>
+                                <exclude>com/epam/training/ticketservice/booking/persistence/Seat.class</exclude>
+                                <exclude>com/epam/training/ticketservice/movie/persistence/Movie.class</exclude>
+                                <exclude>com/epam/training/ticketservice/price/persistence/PriceComponent.class</exclude>
+                                <exclude>com/epam/training/ticketservice/room/persistence/Room.class</exclude>
+                                <exclude>com/epam/training/ticketservice/screening/persistence/Screening.class</exclude>
+
+                            </excludes>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>

@@ -9,7 +9,7 @@ import org.jline.utils.AttributedString;
 public class TicketServiceCommandPrompt implements PromptProvider {
     @Override
     public AttributedString getPrompt() {
-        return new AttributedString("TicketService> ");
+        return new AttributedString("Ticket service> ");
     }
 
 }

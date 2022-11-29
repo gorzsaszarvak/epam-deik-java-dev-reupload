@@ -22,7 +22,7 @@ public class ScreeningCommandHandler extends HelperMethods {
             screeningService.createScreening(movieTitle, roomName, parseStartTime(startTime));
             return "Created screening.";
         } catch (Exception exception) {
-            return "Could not create screening: " + exception.getMessage();
+            return exception.getMessage();
         }
     }
 
@@ -37,7 +37,6 @@ public class ScreeningCommandHandler extends HelperMethods {
         }
     }
 
-    //TODO(can't print in separate lines)
     @ShellMethod(value = "List screenings", key = "list screenings")
     public String listScreenings() {
         try {
@@ -46,7 +45,7 @@ public class ScreeningCommandHandler extends HelperMethods {
                 .forEach(System.out::println);
             return null;
         } catch (Exception exception) {
-            return "There are no screenings at the moment";
+            return exception.getMessage();
         }
     }
 

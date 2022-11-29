@@ -38,9 +38,6 @@ public class Movie {
     @ManyToOne
     private PriceComponent priceComponent;
 
-//    @OneToMany(mappedBy = "movie")
-//    private List<Screening> screenings;
-
     public Movie(String title, String genre, int length) {
         this.title = title;
         this.genre = genre;

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public interface PriceService {
 
-    int getPrice(Screening screening, int numberOfSeats);
+    int getPrice(String movieTitle, String roomName, LocalDateTime startTime, int numberOfSeats);
 
     void updateBasePrice(int basePrice);
 
@@ -17,7 +17,10 @@ public interface PriceService {
 
     void attachPriceComponentToRoom(String componentName, String roomName);
 
-    void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName, LocalDateTime startTime);
+    void attachPriceComponentToScreening(String componentName,
+                                         String movieTitle,
+                                         String roomName,
+                                         LocalDateTime startTime);
 
     PriceComponent findPriceComponentByName(String componentName);
 }

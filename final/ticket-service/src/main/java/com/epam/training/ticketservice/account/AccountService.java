@@ -8,8 +8,6 @@ public interface AccountService {
 
     String describeAccount();
 
-    Boolean loggedInAsAdmin();
-
     Account findAccountByUsername(String username);
 
 

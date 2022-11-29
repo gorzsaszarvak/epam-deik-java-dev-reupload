@@ -13,7 +13,7 @@ Feature: allows creating movie descriptions
   @grade2-requirement
   Scenario: an admin user can update a movie
     Given the user types the "sign in privileged admin admin" command
-    And the user types the "create movie Sátántangó dram 450" command
+    And the user types the "create movie Sátántangó drama 450" command
     When the user types the "update movie Sátántangó drama 450" command
     And the user types the "list movies" command
     Then the next line of the output is "Sátántangó (drama, 450 minutes)"

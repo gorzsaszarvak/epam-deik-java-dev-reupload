@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
                 return sb.toString();
             } else if (!loggedInAsAdmin()) {
                 sb.append(String.format(" account '%s'\n", user));
-
+                //todo
                 sb.append("You have not booked any tickets yet");
 
                 return sb.toString();
@@ -57,12 +57,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean loggedInAsAdmin() {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-            .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
-    }
-
-    @Override
     public Account findAccountByUsername(String username) {
         Optional<Account> account = accountRepository.findAccountByUsername(username);
         if (account.isPresent()) {
@@ -70,6 +64,11 @@ public class AccountServiceImpl implements AccountService {
         } else {
             throw new AccountDoesntExistException(username);
         }
+    }
+
+    private Boolean loggedInAsAdmin() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"));
     }
 
 
