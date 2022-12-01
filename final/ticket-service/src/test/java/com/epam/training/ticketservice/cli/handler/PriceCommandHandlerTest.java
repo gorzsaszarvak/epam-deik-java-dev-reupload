@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.price.PriceService;
+import com.epam.training.ticketservice.price.exception.PriceComponentNotFoundException;
 import com.epam.training.ticketservice.price.persistence.PriceComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,19 @@ class PriceCommandHandlerTest {
     @Mock
     PriceService priceService;
 
+    private String componentName;
+    private String moveTitle;
+    private String roomName;
+    private String startTime;
+
+    @BeforeEach
+    void setUp() {
+        componentName = "testComponent";
+        moveTitle = "testMovie";
+        roomName = "testRoom";
+        startTime = "2022-12-01 18:00";
+    }
+
     @Test
     void testUpdateBasePrice() {
         priceCommandHandler.updateBasePrice(1000);
@@ -31,37 +45,68 @@ class PriceCommandHandlerTest {
         verify(priceService, times(1)).updateBasePrice(1000);
     }
 
+
+
     @Test
     void testCreatePriceComponent() {
-        priceCommandHandler.createPriceComponent("componentName", 1000);
+        priceCommandHandler.createPriceComponent(componentName, 1000);
 
-        verify(priceService, times(1)).createPriceComponent("componentName", 1000);
+        verify(priceService, times(1)).createPriceComponent(componentName, 1000);
     }
+
 
     @Test
     void testAttachPriceComponentToMovie() {
-        priceCommandHandler.attachPriceComponentToMovie("componentName", "title");
+        priceCommandHandler.attachPriceComponentToMovie(componentName, moveTitle);
 
-        verify(priceService, times(1)).attachPriceComponentToMovie("componentName", "title");
+        verify(priceService, times(1)).attachPriceComponentToMovie(componentName, moveTitle);
     }
 
     @Test
-    void attachPriceComponentToRoom() {
-        priceCommandHandler.attachPriceComponentToRoom("componentName", "roomName");
+    void testAttachPriceComponentToMovieHandlesException() {
+        doThrow(PriceComponentNotFoundException.class).when(priceService)
+            .attachPriceComponentToMovie(anyString(), anyString());
+        String expected = "Could not attach price component";
 
-        verify(priceService, times(1)).attachPriceComponentToRoom("componentName", "roomName");
+        String actual = priceCommandHandler.attachPriceComponentToMovie(componentName, moveTitle);
+
+        assertTrue(actual.contains(expected));
     }
 
     @Test
     void testAttachPriceComponentToRoom() {
-        priceCommandHandler.attachPriceComponentToScreening("componentName", "title", "roomName", "2030-01-01 08:10");
+        priceCommandHandler.attachPriceComponentToRoom(componentName, roomName);
+
+        verify(priceService, times(1)).attachPriceComponentToRoom(componentName, roomName);
+    }
+
+    @Test
+    void testAttachPriceComponentToRoomHandlesException() {
+        doThrow(PriceComponentNotFoundException.class).when(priceService)
+            .attachPriceComponentToRoom(anyString(), anyString());
+        String expected = "Could not attach price component";
+
+        String actual = priceCommandHandler.attachPriceComponentToRoom(componentName,roomName);
+
+        assertTrue(actual.contains(expected));
+    }
+
+    @Test
+    void testAttachPriceComponentToScreening() {
+        priceCommandHandler.attachPriceComponentToScreening(componentName, moveTitle, roomName, startTime);
 
         verify(priceService, times(1)).attachPriceComponentToScreening(anyString(), anyString(), anyString(),
             any(LocalDateTime.class));
     }
 
     @Test
-    void showPriceFor() {
+    void testAttachPriceComponentToScreeningHandlesException() {
+        doThrow(PriceComponentNotFoundException.class).when(priceService)
+            .attachPriceComponentToScreening(anyString(), anyString(), anyString(), any(LocalDateTime.class));
+        String expected = "Could not attach price component";
 
+        String actual = priceCommandHandler.attachPriceComponentToScreening(componentName, moveTitle, roomName, startTime);
+
+        assertTrue(actual.contains(expected));
     }
 }

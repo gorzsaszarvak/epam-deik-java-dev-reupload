@@ -1,6 +1,10 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.screening.ScreeningService;
+import com.epam.training.ticketservice.screening.exception.NoScreeningsFoundException;
+import com.epam.training.ticketservice.screening.exception.ScreeningAlreadyExistsException;
+import com.epam.training.ticketservice.screening.exception.ScreeningOverlapsBreakException;
+import com.epam.training.ticketservice.screening.exception.TimeFrameNotAvailableException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -21,8 +25,10 @@ public class ScreeningCommandHandler extends HelperMethods {
         try {
             screeningService.createScreening(movieTitle, roomName, parseStartTime(startTime));
             return "Created screening.";
-        } catch (Exception exception) {
+        } catch (TimeFrameNotAvailableException | ScreeningOverlapsBreakException exception) {
             return exception.getMessage();
+        } catch (Exception exception) {
+            return "Could not create screening: " + exception.getMessage();
         }
     }
 
@@ -44,8 +50,10 @@ public class ScreeningCommandHandler extends HelperMethods {
                 .map(Screening::toString)
                 .forEach(System.out::println);
             return null;
+        } catch (NoScreeningsFoundException exception) {
+            return "There are no screenings";
         } catch (Exception exception) {
-            return exception.getMessage();
+            return  exception.getMessage();
         }
     }
 

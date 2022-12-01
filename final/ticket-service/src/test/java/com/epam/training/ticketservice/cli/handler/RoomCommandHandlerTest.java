@@ -2,6 +2,8 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.room.RoomService;
 import com.epam.training.ticketservice.room.exception.NoRoomsFoundException;
+import com.epam.training.ticketservice.room.exception.RoomAlreadyExistsException;
+import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.room.persistence.RoomRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,15 +25,10 @@ class RoomCommandHandlerTest {
     @Mock
     RoomService roomService;
 
-//    @Mock
-//    RoomRepository roomRepository;
-
     private final String name = "roomName";
     private final int rows = 10;
     private final int columns = 10;
 
-
-    //todo test exception handling
 
     @Test
     void testCreateRoom() {
@@ -40,12 +37,16 @@ class RoomCommandHandlerTest {
         verify(roomService, times(1)).createRoom(name, rows, columns);
     }
 
-//    @Test
-//    void testCreateRoomHandlesExceptionIfRoomExists() {
-//        roomCommandHandler.createRoom(name, rows, columns);
-//
-//        verify(roomRepository, times(0)).save(any(Room.class));
-//    }
+    @Test
+    void testCreateRoomHandlesExceptionIfRoomAlreadyExists() {
+        doThrow(RoomAlreadyExistsException.class).when(roomService).createRoom(anyString(), anyInt(), anyInt());
+        String expected = "Could not create room";
+
+        var actual = roomCommandHandler.createRoom(name, rows, columns);
+
+        assertTrue(actual.contains(expected));
+
+    }
 
     @Test
     void testUpdateRoom() {
@@ -54,12 +55,15 @@ class RoomCommandHandlerTest {
         verify(roomService, times(1)).updateRoom(name, rows, columns);
     }
 
-//    @Test
-//    void testUpdateRoomHandlesExceptionIfRoomDoesntExist() {
-//        roomCommandHandler.updateRoom(name, rows, columns);
-//
-//        verify(roomRepository, times(0)).save(any(Room.class));
-//    }
+    @Test
+    void testUpdateRoomHandlesExceptionIfRoomDoesntExist() {
+        doThrow(RoomNotFoundException.class).when(roomService).updateRoom(anyString(), anyInt(), anyInt());
+        String expected = "Could not update room";
+
+        var actual = roomCommandHandler.updateRoom(name, rows, columns);
+
+        assertTrue(actual.contains(expected));
+    }
 
     @Test
     void testDeleteRoom() {
@@ -68,12 +72,15 @@ class RoomCommandHandlerTest {
         verify(roomService, times(1)).deleteRoom(name);
     }
 
-//    @Test
-//    void testDeleteRoomHandlesExceptionIfRoomDoesntExist() {
-//        roomCommandHandler.deleteRoom(name);
-//
-//        verify(roomRepository, times(0)).delete(any(Room.class));
-//    }
+    @Test
+    void testDeleteRoomHandlesExceptionIfRoomDoesntExist() {
+        doThrow(RoomNotFoundException.class).when(roomService).deleteRoom(anyString());
+        String expected = "Could not delete room";
+
+        var actual = roomCommandHandler.deleteRoom(name);
+
+        assertTrue(actual.contains(expected));
+    }
 
     @Test
     void testListRooms() {

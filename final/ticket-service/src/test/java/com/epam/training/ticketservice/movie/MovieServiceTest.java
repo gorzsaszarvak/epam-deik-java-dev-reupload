@@ -65,7 +65,7 @@ class MovieServiceTest {
     void testCreateMovie() {
         movieService.createMovie(testMovie.getTitle(), testMovie.getGenre(), testMovie.getLength());
 
-        verify(movieRepository, times(1)).save(testMovie);
+        verify(movieRepository, times(1)).save(any(Movie.class));
     }
 
     @Test
@@ -78,7 +78,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void updateMovieDoesntSaveWhenMovieDoesntExist() {
+    void testUpdateMovieDoesntSaveWhenMovieDoesntExist() {
         when(movieRepository.existsByTitle(testMovie.getTitle())).thenReturn(false);
 
         assertThrows(MovieNotFoundException.class,
@@ -88,7 +88,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void testDeleteMovieDeletesMovieIfItExists() {
+    void testDeleteMovie() {
         when(movieRepository.existsByTitle(anyString())).thenReturn(true);
         when(movieRepository.findMovieByTitle(anyString())).thenReturn(Optional.of(testMovie));
         movieService.deleteMovie(testMovie.getTitle());
@@ -105,7 +105,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void testFindMovieByTitleReturnsMovieIfItExists() {
+    void testFindMovie() {
         when(movieRepository.findMovieByTitle(testMovie.getTitle())).thenReturn(Optional.ofNullable(testMovie));
         Movie returnedMovie = movieService.findMovieByTitle(testMovie.getTitle());
 

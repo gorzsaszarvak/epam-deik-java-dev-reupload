@@ -31,7 +31,7 @@ public class PriceCommandHandler extends HelperMethods {
             priceService.createPriceComponent(componentName, amount);
             return "Price component created";
         } catch (Exception exception) {
-            return exception.getMessage();
+            return "Could not create price component: " + exception.getMessage();
         }
     }
 
@@ -43,7 +43,7 @@ public class PriceCommandHandler extends HelperMethods {
             priceService.attachPriceComponentToMovie(componentName, movieTitle);
             return "Price component attached to movie";
         } catch (Exception exception) {
-            return exception.getMessage();
+            return "Could not attach price component: " + exception.getMessage();
         }
     }
 
@@ -55,7 +55,7 @@ public class PriceCommandHandler extends HelperMethods {
             priceService.attachPriceComponentToRoom(componentName, roomName);
             return "Price component attached to room";
         } catch (Exception exception) {
-            return exception.getMessage();
+            return "Could not attach price component: " + exception.getMessage();
         }
     }
 
@@ -70,7 +70,7 @@ public class PriceCommandHandler extends HelperMethods {
             priceService.attachPriceComponentToScreening(componentName, movieTitle, roomName, startTime);
             return "Price component attached to screening";
         } catch (Exception exception) {
-            return exception.getMessage();
+            return "Could not attach price component: " + exception.getMessage();
         }
     }
 
@@ -83,7 +83,7 @@ public class PriceCommandHandler extends HelperMethods {
             int price = priceService.getPrice(movieTitle, roomName, startTime, seats.size());
             return String.format("The price for this booking would be %d HUF", price);
         } catch (Exception exception) {
-            return exception.getMessage();
+            return "Could not calculate price: " + exception.getMessage();
         }
     }
 

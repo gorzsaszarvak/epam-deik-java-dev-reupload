@@ -1,6 +1,8 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.room.RoomService;
+import com.epam.training.ticketservice.room.exception.RoomAlreadyExistsException;
+import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -25,6 +27,7 @@ public class RoomCommandHandler extends HelperMethods {
         } catch (Exception exception) {
             return "Could not create room: " + exception.getMessage();
         }
+
     }
 
     @ShellMethod(value = "Update room", key = "update room")

@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,21 +60,9 @@ class ScreeningServiceTest {
     @BeforeEach
     void setUp() {
         startTime = LocalDateTime.now();
-        testMovie = new Movie(
-            "title",
-            "genre",
-            100
-        );
-        testRoom = new Room(
-            "name",
-            10,
-            10
-        );
-        testScreening = new Screening(
-            testMovie,
-            testRoom,
-            startTime
-        );
+        testMovie = new Movie("title", "genre", 100);
+        testRoom = new Room("name", 10, 10);
+        testScreening = new Screening(testMovie, testRoom, startTime);
     }
 
     @Test
@@ -90,8 +79,7 @@ class ScreeningServiceTest {
     void testListScreeningsThrowsExceptionWhenNoScreeningsExist() {
         when(screeningRepository.findAll()).thenReturn(Collections.emptyList());
 
-        assertThrows(NoScreeningsFoundException.class,
-            () -> screeningService.listScreenings());
+        assertThrows(NoScreeningsFoundException.class, () -> screeningService.listScreenings());
     }
 
     @Test
@@ -112,48 +100,33 @@ class ScreeningServiceTest {
             any(LocalDateTime.class))).thenReturn(true);
 
         assertThrows(ScreeningAlreadyExistsException.class,
-            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(),
-                startTime));
+            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(), startTime));
         verify(screeningRepository, times(0)).save(any(Screening.class));
     }
 
-    //todo test time frame validator
-//    @Test
-//    void testCreateScreeningThrowsExceptionWhenScreeningsOverlap() {
-//        when(movieService.findMovieByTitle(anyString())).thenReturn(testMovie);
-//        when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
-//        when(screeningService.timeFrameIsAvailable(testScreening)).thenThrow(TimeFrameNotAvailableException.class);
-//
-//        assertThrows(TimeFrameNotAvailableException.class,
-//            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(),
-//                startTime));
-//        verify(screeningRepository, times(0)).save(any(Screening.class));
-//    }
-//
-//    @Test
-//    void testCreateScreeningThrowsExceptionWhenScreeningOverlapsBreak() {
-//        when(movieService.findMovieByTitle(anyString())).thenReturn(testMovie);
-//        when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
-//        when(screeningService.timeFrameIsAvailable(testScreening)).thenThrow(ScreeningOverlapsBreakException.class);
-//
-//        assertThrows(ScreeningOverlapsBreakException.class,
-//            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(),
-//                startTime));
-//        verify(screeningRepository, times(0)).save(any(Screening.class));
-//    }
-//
-//    @Test
-//    void testCreateScreeningThrowsExceptionWhenScreeningsOverlap() {
-//        screeningRepository.save(testScreening);
-//        when(movieService.findMovieByTitle(anyString())).thenReturn(testMovie);
-//        when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
-//        when(screeningRepository.existsByMovieAndRoomAndStartTime(any(Movie.class), any(Room.class), any(LocalDateTime.class))).thenReturn(false);
-//
-//        assertThrows(TimeFrameNotAvailableException.class,
-//            () -> screeningService.createScreening("title", "room", startTime.minusMinutes(1)));
-//        verify(screeningRepository, times(0)).save(any(Screening.class));
-//    }
+    @Test
+    void testCreateScreeningThrowsExceptionWhenScreeningsOverlap() {
+        when(movieService.findMovieByTitle(anyString())).thenReturn(testMovie);
+        when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
+        when(screeningRepository.findAllByRoom(any(Room.class))).thenReturn(
+            List.of(new Screening(testMovie, testRoom, startTime.minusMinutes(1))));
 
+        assertThrows(TimeFrameNotAvailableException.class,
+            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(), startTime));
+        verify(screeningRepository, times(0)).save(any(Screening.class));
+    }
+
+    @Test
+    void testCreateScreeningThrowsExceptionWhenScreeningOverlapsBreak() {
+        when(movieService.findMovieByTitle(anyString())).thenReturn(testMovie);
+        when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
+        when(screeningRepository.findAllByRoom(any(Room.class))).thenReturn(
+            List.of(new Screening(testMovie, testRoom, startTime.minusMinutes(testMovie.getLength()))));
+
+        assertThrows(ScreeningOverlapsBreakException.class,
+            () -> screeningService.createScreening(testMovie.getTitle(), testRoom.getName(), startTime));
+        verify(screeningRepository, times(0)).save(any(Screening.class));
+    }
 
     @Test
     void testDeleteScreening() {
@@ -175,8 +148,7 @@ class ScreeningServiceTest {
             Optional.empty());
 
         assertThrows(ScreeningNotFoundException.class,
-            () -> screeningService.deleteScreening(testMovie.getTitle(), testRoom.getName(),
-                startTime));
+            () -> screeningService.deleteScreening(testMovie.getTitle(), testRoom.getName(), startTime));
         verify(screeningRepository, times(0)).delete(any(Screening.class));
     }
 
@@ -201,5 +173,4 @@ class ScreeningServiceTest {
             () -> screeningService.findScreeningByTitleRoomStartTime(testMovie.getTitle(), testRoom.getName(),
                 startTime));
     }
-
 }
