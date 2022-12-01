@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.booking.impl;
 
 import com.epam.training.ticketservice.account.AccountService;
+import com.epam.training.ticketservice.account.persistence.Account;
 import com.epam.training.ticketservice.booking.BookingService;
 import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistException;
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
@@ -18,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,23 +39,30 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
 
-    @Override
-    public Booking book(String movieTitle, String roomName, LocalDateTime startTime, List<Seat> seats)
-        throws SeatsAlreadyBookedException, SeatDoesNotExistException {
+    public Booking mapToBooking(String movieTitle, String roomName, LocalDateTime startTime, List<Seat> seats)
+        throws ScreeningNotFoundException {
+
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
+        Booking booking = Booking.builder()
+            .screening(screening)
+            .seats(seats)
+            .price(priceService.getPrice(movieTitle, roomName, startTime, seats.size()))
+            .build();
 
-        Booking booking = Booking.builder().account(
-                accountService.findAccountByUsername((SecurityContextHolder.getContext()
-                    .getAuthentication()
-                    .getName())))
-            .screening(screening).seats(seats)
-            .price(priceService.getPrice(movieTitle, roomName, startTime, seats.size())).build();
+        Account account =
+            accountService.findAccountByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        areSeatsAvailable(screening, seats);
-        doSeatsExist(screening, seats);
+        booking.setAccount(account);
+        return booking;
+    }
+
+    @Override
+    public void book(Booking booking)
+        throws SeatsAlreadyBookedException, SeatDoesNotExistException {
+        areSeatsAvailable(booking.getScreening(), booking.getSeats());
+        doSeatsExist(booking.getScreening(), booking.getSeats());
 
         bookingRepository.save(booking);
-        return booking;
 
     }
 

@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.movie.persistence;
 
 
 import com.epam.training.ticketservice.price.persistence.PriceComponent;
-import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Data

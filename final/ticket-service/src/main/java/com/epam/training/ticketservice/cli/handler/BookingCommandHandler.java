@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistExcepti
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.Seat;
+import com.epam.training.ticketservice.screening.persistence.Screening;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -23,10 +24,11 @@ public class BookingCommandHandler extends HelperMethods {
     @ShellMethodAvailability(value = "loggedInAsUser")
     public String book(final String movieTitle, final String roomName, final String startTimeString,
                        final String seatsString) {
-        LocalDateTime startTime = parseStartTime(startTimeString);
-        List<Seat> seats = parseSeats(seatsString);
         try {
-            Booking booking = bookingService.book(movieTitle, roomName, startTime, seats);
+            LocalDateTime startTime = parseStartTime(startTimeString);
+            List<Seat> seats = parseSeats(seatsString);
+            Booking booking = bookingService.mapToBooking(movieTitle, roomName, startTime, seats);
+            bookingService.book(booking);
             return booking.toString();
         } catch (SeatDoesNotExistException | SeatsAlreadyBookedException exception) {
             return exception.getMessage();

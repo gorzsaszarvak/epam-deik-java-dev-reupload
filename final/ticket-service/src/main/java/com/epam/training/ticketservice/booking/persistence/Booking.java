@@ -57,7 +57,7 @@ public class Booking {
             .append(screening.getMovie().getTitle())
             .append(" in room ")
             .append(screening.getRoom().getName())
-            .append(" starting at ")
+            .append(" at ")
             .append(screening.getStartTime())
             .append(" for ")
             .append(price)

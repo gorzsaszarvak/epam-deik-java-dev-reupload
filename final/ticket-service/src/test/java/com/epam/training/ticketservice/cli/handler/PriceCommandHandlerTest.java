@@ -60,8 +60,8 @@ class PriceCommandHandlerTest {
             any(LocalDateTime.class));
     }
 
-//    @Test
-//    void showPriceFor() {
-//
-//    }
+    @Test
+    void showPriceFor() {
+
+    }
 }

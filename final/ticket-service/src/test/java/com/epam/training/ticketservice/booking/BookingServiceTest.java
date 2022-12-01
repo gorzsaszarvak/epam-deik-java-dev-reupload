@@ -108,7 +108,8 @@ class BookingServiceTest {
         when(accountService.findAccountByUsername(anyString())).thenReturn(testAccount);
         when(priceService.getPrice(anyString(), anyString(), any(LocalDateTime.class), anyInt())).thenReturn(1000);
 
-        bookingService.book("title", "room", LocalDateTime.now(), testSeats);
+        Booking booking = bookingService.mapToBooking("title", "room", LocalDateTime.now(), testSeats);
+        bookingService.book(booking);
 
         verify(bookingRepository, times(1)).save(any(Booking.class));
     }

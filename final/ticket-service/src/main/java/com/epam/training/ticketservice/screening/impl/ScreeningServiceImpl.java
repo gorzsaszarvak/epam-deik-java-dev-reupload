@@ -87,7 +87,7 @@ public class ScreeningServiceImpl implements ScreeningService {
     }
 
     private boolean timeFrameIsAvailable(Screening newScreening) {
-        for (Screening screening : screeningRepository.findAll()) {
+        for (Screening screening : screeningRepository.findAllByRoom(newScreening.getRoom())) {
             if (newScreening.getStartTime().isBefore(screening.getEndTime())
                 && newScreening.getEndTime().isAfter(screening.getStartTime())) {
                 throw new TimeFrameNotAvailableException();

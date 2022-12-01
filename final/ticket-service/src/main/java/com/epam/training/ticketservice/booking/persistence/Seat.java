@@ -11,8 +11,8 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Seat {
-    private int row;
-    private int column;
+    int row;
+    int column;
 
     @Override
     public String toString() {
