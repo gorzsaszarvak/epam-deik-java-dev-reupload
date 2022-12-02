@@ -1,11 +1,10 @@
 package com.epam.training.ticketservice.cli.handler;
 
-import com.epam.training.ticketservice.room.persistence.Room;
+import com.epam.training.ticketservice.cli.handler.ScreeningCommandHandler;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.NoScreeningsFoundException;
 import com.epam.training.ticketservice.screening.exception.ScreeningAlreadyExistsException;
 import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

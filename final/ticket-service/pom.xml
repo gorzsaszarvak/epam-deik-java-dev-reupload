@@ -275,6 +275,7 @@
                                 <exclude>com/epam/training/ticketservice/room/persistence/Room.class</exclude>
                                 <exclude>com/epam/training/ticketservice/screening/persistence/Screening.class</exclude>
                                 <exclude>com/epam/training/ticketservice/account/config/AccountConfigurations.class</exclude>
+                                <exclude>com/epam/training/ticketservice/cli/handler/HelperMethods.class</exclude>
 
 
                             </excludes>

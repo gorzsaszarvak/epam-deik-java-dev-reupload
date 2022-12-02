@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.NoScreeningsFoundException;
-import com.epam.training.ticketservice.screening.exception.ScreeningAlreadyExistsException;
 import com.epam.training.ticketservice.screening.exception.ScreeningOverlapsBreakException;
 import com.epam.training.ticketservice.screening.exception.TimeFrameNotAvailableException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
-
-import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor

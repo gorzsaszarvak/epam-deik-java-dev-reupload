@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.price.PriceService;
 import com.epam.training.ticketservice.price.exception.PriceComponentNotFoundException;
-import com.epam.training.ticketservice.price.persistence.PriceComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

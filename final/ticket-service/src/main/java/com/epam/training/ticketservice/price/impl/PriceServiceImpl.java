@@ -57,7 +57,8 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public void attachPriceComponentToMovie(String componentName, String movieTitle) {
+    public void attachPriceComponentToMovie(String componentName, String movieTitle)
+        throws PriceComponentNotFoundException, MovieNotFoundException {
 
         PriceComponent priceComponent = findPriceComponentByName(componentName);
         Movie movie = movieService.findMovieByTitle(movieTitle);
@@ -89,7 +90,7 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public void attachPriceComponentToScreening(String componentName, String movieTitle, String roomName,
                                                 LocalDateTime startTime)
-        throws ScreeningNotFoundException, PriceComponentNotFoundException {
+        throws PriceComponentNotFoundException, ScreeningNotFoundException {
 
         PriceComponent priceComponent = findPriceComponentByName(componentName);
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);

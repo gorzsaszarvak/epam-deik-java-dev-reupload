@@ -1,16 +1,11 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.room.RoomService;
-import com.epam.training.ticketservice.room.exception.RoomAlreadyExistsException;
-import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor

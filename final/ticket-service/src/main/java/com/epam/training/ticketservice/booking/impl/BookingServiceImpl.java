@@ -7,10 +7,12 @@ import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistExcepti
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.BookingRepository;
+import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
 import com.epam.training.ticketservice.price.PriceService;
 import com.epam.training.ticketservice.price.impl.PriceServiceImpl;
 import com.epam.training.ticketservice.booking.persistence.Seat;
 import com.epam.training.ticketservice.room.RoomService;
+import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
@@ -40,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
 
     public Booking mapToBooking(String movieTitle, String roomName, LocalDateTime startTime, List<Seat> seats)
-        throws ScreeningNotFoundException {
+        throws ScreeningNotFoundException, MovieNotFoundException, RoomNotFoundException {
 
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
         Booking booking = Booking.builder()
@@ -68,7 +70,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void doSeatsExist(Screening screening, List<Seat> seats) throws SeatDoesNotExistException {
         for (Seat seat : seats) {
-            if (seat.getRow() < 0 || seat.getColumn() < 0) {
+            if (seat.getRow() < 1 || seat.getColumn() < 1) {
                 throw new SeatDoesNotExistException(seat.toString());
             } else if (seat.getRow() > screening.getRoom().getRows()
                 || seat.getColumn() > screening.getRoom().getColumns()) {

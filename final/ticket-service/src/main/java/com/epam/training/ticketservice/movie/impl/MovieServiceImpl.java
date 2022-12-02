@@ -62,7 +62,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie findMovieByTitle(String title) {
+    public Movie findMovieByTitle(String title) throws MovieNotFoundException {
         Optional<Movie> movie = movieRepository.findMovieByTitle(title);
         if (movie.isPresent()) {
             return movie.get();

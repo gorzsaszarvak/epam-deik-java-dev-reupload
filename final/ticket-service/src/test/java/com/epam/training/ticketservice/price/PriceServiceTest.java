@@ -1,6 +1,8 @@
 package com.epam.training.ticketservice.price;
 
 import com.epam.training.ticketservice.movie.MovieService;
+import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
+import com.epam.training.ticketservice.movie.impl.MovieServiceImpl;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.price.exception.PriceComponentAlreadyExistsException;
 import com.epam.training.ticketservice.price.exception.PriceComponentNotFoundException;
@@ -8,8 +10,10 @@ import com.epam.training.ticketservice.price.impl.PriceServiceImpl;
 import com.epam.training.ticketservice.price.persistence.PriceComponent;
 import com.epam.training.ticketservice.price.persistence.PriceComponentRepository;
 import com.epam.training.ticketservice.room.RoomService;
+import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.screening.ScreeningService;
+import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,10 +66,7 @@ class PriceServiceTest {
         testMovie = new Movie("testTitle", "testGenre", 100);
         testRoom = new Room("testName", 10, 10);
         testScreening = new Screening(testMovie, testRoom, startTime);
-        testComponent = PriceComponent.builder()
-            .name("testComponent")
-            .amount(1000)
-            .build();
+        testComponent = PriceComponent.builder().name("testComponent").amount(1000).build();
     }
 
     @Test
@@ -127,6 +129,16 @@ class PriceServiceTest {
     }
 
     @Test
+    void testAttachPriceComponentToMovieThrowsExceptionWhenMovieDoesntExist() {
+        when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
+        doThrow(MovieNotFoundException.class).when(movieService).findMovieByTitle(anyString());
+
+        assertThrows(MovieNotFoundException.class,
+            () -> priceService.attachPriceComponentToMovie(testComponent.getName(), testMovie.getTitle()));
+        verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
+    }
+
+    @Test
     void testAttachPriceComponentToRoom() {
         when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
         when(roomService.findRoomByName(anyString())).thenReturn(testRoom);
@@ -146,12 +158,23 @@ class PriceServiceTest {
     }
 
     @Test
+    void testAttachPriceComponentToRoomThrowsExceptionWhenRoomDoesntExist() {
+        when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
+        doThrow(RoomNotFoundException.class).when(roomService).findRoomByName(anyString());
+
+        assertThrows(RoomNotFoundException.class,
+            () -> priceService.attachPriceComponentToRoom(testComponent.getName(), testRoom.getName()));
+        verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
+    }
+
+    @Test
     void testAttachPriceComponentToScreening() {
         when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
         when(screeningService.findScreeningByTitleRoomStartTime(testMovie.getTitle(), testRoom.getName(),
             startTime)).thenReturn(testScreening);
 
-        priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(), testRoom.getName(), startTime);
+        priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(), testRoom.getName(),
+            startTime);
 
         verify(priceComponentRepository, times(1)).save(any(PriceComponent.class));
     }
@@ -161,7 +184,44 @@ class PriceServiceTest {
         when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.empty());
 
         assertThrows(PriceComponentNotFoundException.class,
-            () -> priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(), testRoom.getName(), startTime));
+            () -> priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(),
+                testRoom.getName(), startTime));
+        verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
+    }
+
+    @Test
+    void testAttachPriceComponentToScreeningThrowsExceptionWhenScreeningDoesntExist() {
+        when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
+        doThrow(ScreeningNotFoundException.class).when(screeningService)
+            .findScreeningByTitleRoomStartTime(anyString(), anyString(), any(LocalDateTime.class));
+
+        assertThrows(ScreeningNotFoundException.class,
+            () -> priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(),
+                testRoom.getName(), startTime));
+        verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
+    }
+
+    @Test
+    void testAttachPriceComponentToScreeningThrowsExceptionWhenMovieDoesntExist() {
+        when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
+        doThrow(MovieNotFoundException.class).when(screeningService)
+            .findScreeningByTitleRoomStartTime(anyString(), anyString(), any(LocalDateTime.class));
+
+        assertThrows(MovieNotFoundException.class,
+            () -> priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(),
+                testRoom.getName(), startTime));
+        verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
+    }
+
+    @Test
+    void testAttachPriceComponentToScreeningThrowsExceptionWhenRoomDoesntExist() {
+        when(priceComponentRepository.findPriceComponentByName(anyString())).thenReturn(Optional.of(testComponent));
+        doThrow(RoomNotFoundException.class).when(screeningService)
+            .findScreeningByTitleRoomStartTime(anyString(), anyString(), any(LocalDateTime.class));
+
+        assertThrows(RoomNotFoundException.class,
+            () -> priceService.attachPriceComponentToScreening(testComponent.getName(), testMovie.getTitle(),
+                testRoom.getName(), startTime));
         verify(priceComponentRepository, times(0)).save(any(PriceComponent.class));
     }
 

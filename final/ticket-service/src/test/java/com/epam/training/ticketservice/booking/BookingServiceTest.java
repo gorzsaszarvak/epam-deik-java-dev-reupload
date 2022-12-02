@@ -2,18 +2,19 @@ package com.epam.training.ticketservice.booking;
 
 import com.epam.training.ticketservice.account.AccountService;
 import com.epam.training.ticketservice.account.persistence.Account;
-import com.epam.training.ticketservice.account.persistence.Role;
 import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistException;
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
 import com.epam.training.ticketservice.booking.impl.BookingServiceImpl;
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.BookingRepository;
 import com.epam.training.ticketservice.booking.persistence.Seat;
+import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.price.PriceService;
+import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.room.persistence.Room;
 import com.epam.training.ticketservice.screening.ScreeningService;
-import com.epam.training.ticketservice.screening.impl.ScreeningServiceImpl;
+import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,20 +35,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-
-//todo more tests
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
@@ -85,7 +79,7 @@ class BookingServiceTest {
         testRoom = new Room("name", 10, 10);
         startTime = LocalDateTime.now();
         testScreening = new Screening(testMovie, testRoom, startTime);
-        testSeats = List.of(new Seat(1,2));
+        testSeats = List.of(new Seat(1, 2));
 
         testAccount = Account.builder()
             .username("user")
@@ -115,4 +109,85 @@ class BookingServiceTest {
 
         verify(bookingRepository, times(1)).save(any(Booking.class));
     }
+
+    @Test
+    void testBookThrowsExceptionWhenScreeningDoesNotExist() {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenThrow(ScreeningNotFoundException.class);
+
+        assertThrows(ScreeningNotFoundException.class,
+            () -> bookingService.mapToBooking("title", "room", LocalDateTime.now(), testSeats));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+    @Test
+    void testBookThrowsExceptionWhenMovieDoesNotExist() {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenThrow(MovieNotFoundException.class);
+
+        assertThrows(MovieNotFoundException.class,
+            () -> bookingService.mapToBooking("title", "room", LocalDateTime.now(), testSeats));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+    @Test
+    void testBookThrowsExceptionWhenRoomDoesNotExist() {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenThrow(RoomNotFoundException.class);
+
+        assertThrows(RoomNotFoundException.class,
+            () -> bookingService.mapToBooking("title", "room", LocalDateTime.now(), testSeats));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+    @Test
+    void testBookThrowsExceptionWhenSeatsBiggerThanMax() {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenReturn(testScreening);
+        when(accountService.findAccountByUsername(anyString())).thenReturn(testAccount);
+        when(priceService.getPrice(anyString(), anyString(), any(LocalDateTime.class), anyInt())).thenReturn(1000);
+
+        Booking booking = bookingService.mapToBooking("title", "room", LocalDateTime.now(),
+            List.of(new Seat(testRoom.getRows() + 1, testRoom.getColumns() + 1)));
+        assertThrows(SeatDoesNotExistException.class,
+            () -> bookingService.book(booking));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+    @Test
+    void testBookThrowsExceptionWhenSeatsSmallerThanMin() {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenReturn(testScreening);
+        when(accountService.findAccountByUsername(anyString())).thenReturn(testAccount);
+        when(priceService.getPrice(anyString(), anyString(), any(LocalDateTime.class), anyInt())).thenReturn(1000);
+
+        Booking booking =
+            bookingService.mapToBooking("title", "room", LocalDateTime.now(), List.of(new Seat(-1, -1)));
+        assertThrows(SeatDoesNotExistException.class,
+            () -> bookingService.book(booking));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+    @Test
+    void testBookThrowsExceptionWhenSeatsAlreadyBooked() throws SeatDoesNotExistException, SeatsAlreadyBookedException {
+        when(screeningService.findScreeningByTitleRoomStartTime(anyString(), anyString(),
+            any(LocalDateTime.class))).thenReturn(testScreening);
+        when(accountService.findAccountByUsername(anyString())).thenReturn(testAccount);
+        when(priceService.getPrice(anyString(), anyString(), any(LocalDateTime.class), anyInt())).thenReturn(1000);
+
+        Booking booking = bookingService.mapToBooking("title", "room", LocalDateTime.now(), List.of(new Seat(1, 1)));
+        when(bookingRepository.findBookingsByScreening(any(Screening.class))).thenReturn(List.of(booking));
+
+        assertThrows(SeatsAlreadyBookedException.class,
+            () -> bookingService.book(booking));
+
+        verify(bookingRepository, times(0)).save(any(Booking.class));
+    }
+
+
 }

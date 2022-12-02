@@ -16,6 +16,7 @@ import javax.persistence.Table;
 @Table(name = "rooms")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Room {
 
     @Id

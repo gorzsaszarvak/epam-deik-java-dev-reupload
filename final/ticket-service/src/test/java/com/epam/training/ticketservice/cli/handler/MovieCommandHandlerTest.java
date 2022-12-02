@@ -1,8 +1,6 @@
 package com.epam.training.ticketservice.cli.handler;
 
 import com.epam.training.ticketservice.movie.impl.MovieServiceImpl;
-import com.epam.training.ticketservice.movie.persistence.Movie;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,8 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,7 +15,6 @@ import static org.mockito.Mockito.verify;
 import com.epam.training.ticketservice.movie.exception.MovieAlreadyExistsException;
 import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
 import com.epam.training.ticketservice.movie.exception.NoMoviesFoundException;
-import com.epam.training.ticketservice.movie.persistence.MovieRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
