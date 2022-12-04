@@ -17,8 +17,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -45,20 +47,32 @@ public class Booking {
     @Column(name = "price")
     private int price;
 
+    public Booking(Account account, Screening screening, List<Seat> seats, int price) {
+        this.account = account;
+        this.screening = screening;
+        this.seats = seats;
+        this.price = price;
+    }
+
     @Override
     public String toString() {
+
+        String pattern = "yyyy-MM-dd HH:mm";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+
         StringBuilder sb = new StringBuilder();
-        List<String> seatList = new ArrayList<>();
-        seats.forEach(x -> seatList.add(String.format("(%$1d,%$2d)", x.getRow(), x.getColumn())));
+        List<String> seatsAsString = seats.stream()
+                .map(Seat::toString)
+                    .collect(Collectors.toList());
 
         return sb.append("Seats ")
-            .append(String.join(", ", seatList))
+            .append(String.join(", ", seatsAsString))
             .append(" on ")
             .append(screening.getMovie().getTitle())
             .append(" in room ")
             .append(screening.getRoom().getName())
-            .append(" at ")
-            .append(screening.getStartTime())
+            .append(" starting at ")
+            .append(screening.getStartTime().format(formatter))
             .append(" for ")
             .append(price)
             .append(" HUF")

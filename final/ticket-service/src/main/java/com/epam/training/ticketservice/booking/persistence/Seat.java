@@ -11,11 +11,11 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Seat {
-    int row;
-    int column;
+    int rowIndex;
+    int columnIndex;
 
     @Override
     public String toString() {
-        return String.format("%1$d,%2$d", row, column);
+        return String.format("(%d,%d)", rowIndex, columnIndex);
     }
 }

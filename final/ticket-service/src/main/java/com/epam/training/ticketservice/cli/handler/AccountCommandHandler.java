@@ -37,7 +37,7 @@ public class AccountCommandHandler extends HelperMethods {
         try {
             Authentication request = new UsernamePasswordAuthenticationToken(username, password);
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(request));
-            return "Signed in as '" + username + "'";
+            return String.format("Signed in with account '%s'", username);
         } catch (Exception exception) {
             return "Login failed due to incorrect credentials";
         }

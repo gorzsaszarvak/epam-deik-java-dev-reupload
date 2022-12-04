@@ -9,9 +9,7 @@ import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.BookingRepository;
 import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
 import com.epam.training.ticketservice.price.PriceService;
-import com.epam.training.ticketservice.price.impl.PriceServiceImpl;
 import com.epam.training.ticketservice.booking.persistence.Seat;
-import com.epam.training.ticketservice.room.RoomService;
 import com.epam.training.ticketservice.room.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.ScreeningNotFoundException;
@@ -21,12 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -45,22 +39,17 @@ public class BookingServiceImpl implements BookingService {
         throws ScreeningNotFoundException, MovieNotFoundException, RoomNotFoundException {
 
         Screening screening = screeningService.findScreeningByTitleRoomStartTime(movieTitle, roomName, startTime);
-        Booking booking = Booking.builder()
-            .screening(screening)
-            .seats(seats)
-            .price(priceService.getPrice(movieTitle, roomName, startTime, seats.size()))
-            .build();
-
+        int price = priceService.getPrice(movieTitle, roomName, startTime, seats.size());
         Account account =
             accountService.findAccountByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        booking.setAccount(account);
-        return booking;
+        return new Booking(account, screening, seats, price);
     }
 
     @Override
     public void book(Booking booking)
         throws SeatsAlreadyBookedException, SeatDoesNotExistException {
+
         areSeatsAvailable(booking.getScreening(), booking.getSeats());
         doSeatsExist(booking.getScreening(), booking.getSeats());
 
@@ -70,10 +59,10 @@ public class BookingServiceImpl implements BookingService {
 
     private void doSeatsExist(Screening screening, List<Seat> seats) throws SeatDoesNotExistException {
         for (Seat seat : seats) {
-            if (seat.getRow() < 1 || seat.getColumn() < 1) {
+            if (seat.getRowIndex() < 1 || seat.getColumnIndex() < 1) {
                 throw new SeatDoesNotExistException(seat.toString());
-            } else if (seat.getRow() > screening.getRoom().getRows()
-                || seat.getColumn() > screening.getRoom().getColumns()) {
+            } else if (seat.getRowIndex() > screening.getRoom().getRows()
+                || seat.getColumnIndex() > screening.getRoom().getColumns()) {
                 throw new SeatDoesNotExistException(seat.toString());
             }
         }
