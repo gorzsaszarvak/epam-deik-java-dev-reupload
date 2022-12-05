@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.booking;
 
-import com.epam.training.ticketservice.account.persistence.Account;
 import com.epam.training.ticketservice.booking.exception.SeatDoesNotExistException;
 import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedException;
 import com.epam.training.ticketservice.booking.persistence.Booking;

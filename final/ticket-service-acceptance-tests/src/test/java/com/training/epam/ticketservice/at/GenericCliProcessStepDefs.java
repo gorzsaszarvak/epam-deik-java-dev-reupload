@@ -16,7 +16,7 @@ public class GenericCliProcessStepDefs {
 
     private static final int OUTPUT_TIMEOUT = 15000;
 
-    private ProcessUnderTest cliProcess;
+    private final ProcessUnderTest cliProcess;
 
     public GenericCliProcessStepDefs(ProcessUnderTest cliProcess) {
         this.cliProcess = cliProcess;

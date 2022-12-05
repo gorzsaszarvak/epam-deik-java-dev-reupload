@@ -7,11 +7,9 @@ import com.epam.training.ticketservice.account.exception.UsernameAlreadyExistsEx
 import com.epam.training.ticketservice.account.persistence.Account;
 import com.epam.training.ticketservice.account.persistence.AccountRepository;
 import com.epam.training.ticketservice.account.persistence.Role;
-import com.epam.training.ticketservice.booking.BookingService;
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

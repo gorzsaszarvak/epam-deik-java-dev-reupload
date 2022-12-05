@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.price;
 
 import com.epam.training.ticketservice.price.persistence.PriceComponent;
-import com.epam.training.ticketservice.screening.persistence.Screening;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.cli.handler;
 
-import com.epam.training.ticketservice.cli.handler.ScreeningCommandHandler;
 import com.epam.training.ticketservice.screening.ScreeningService;
 import com.epam.training.ticketservice.screening.exception.NoScreeningsFoundException;
 import com.epam.training.ticketservice.screening.exception.ScreeningAlreadyExistsException;

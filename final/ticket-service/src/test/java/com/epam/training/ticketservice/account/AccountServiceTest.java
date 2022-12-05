@@ -8,7 +8,6 @@ import com.epam.training.ticketservice.account.persistence.Account;
 import com.epam.training.ticketservice.account.persistence.AccountRepository;
 import com.epam.training.ticketservice.account.persistence.Role;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +27,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//todo more tests
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 

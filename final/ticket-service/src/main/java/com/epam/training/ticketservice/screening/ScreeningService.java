@@ -3,9 +3,7 @@ package com.epam.training.ticketservice.screening;
 import com.epam.training.ticketservice.screening.persistence.Screening;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface ScreeningService {
 

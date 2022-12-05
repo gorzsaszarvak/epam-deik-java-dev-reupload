@@ -6,7 +6,6 @@ import com.epam.training.ticketservice.booking.exception.SeatsAlreadyBookedExcep
 import com.epam.training.ticketservice.booking.persistence.Booking;
 import com.epam.training.ticketservice.booking.persistence.Seat;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -14,7 +13,6 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -36,13 +34,12 @@ public class BookingCommandHandler extends HelperMethods {
                 .map(Seat::toString)
                 .collect(Collectors.toList());
 
-            StringBuilder sb = new StringBuilder();
-            return sb.append("Seats booked: ")
-                .append(String.join(", ", seatsAsString))
-                .append("; the price for this booking is ")
-                .append(booking.getPrice())
-                .append(" HUF")
-                .toString();
+            String sb = "Seats booked: " +
+                String.join(", ", seatsAsString) +
+                "; the price for this booking is " +
+                booking.getPrice() +
+                " HUF";
+            return sb;
 
         } catch (SeatDoesNotExistException | SeatsAlreadyBookedException exception) {
             return exception.getMessage();

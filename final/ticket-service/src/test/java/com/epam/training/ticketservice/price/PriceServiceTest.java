@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.price;
 
 import com.epam.training.ticketservice.movie.MovieService;
 import com.epam.training.ticketservice.movie.exception.MovieNotFoundException;
-import com.epam.training.ticketservice.movie.impl.MovieServiceImpl;
 import com.epam.training.ticketservice.movie.persistence.Movie;
 import com.epam.training.ticketservice.price.exception.PriceComponentAlreadyExistsException;
 import com.epam.training.ticketservice.price.exception.PriceComponentNotFoundException;
@@ -36,8 +35,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-//todo more tests
 @ExtendWith(MockitoExtension.class)
 class PriceServiceTest {
 
