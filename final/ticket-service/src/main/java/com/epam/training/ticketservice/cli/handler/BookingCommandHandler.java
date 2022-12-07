@@ -30,15 +30,10 @@ public class BookingCommandHandler extends HelperMethods {
             Booking booking = bookingService.mapToBooking(movieTitle, roomName, startTime, seats);
             bookingService.book(booking);
 
-            List<String> seatsAsString = seats.stream()
-                .map(Seat::toString)
-                .collect(Collectors.toList());
+            List<String> seatsAsString = seats.stream().map(Seat::toString).collect(Collectors.toList());
 
-            String sb = "Seats booked: " +
-                String.join(", ", seatsAsString) +
-                "; the price for this booking is " +
-                booking.getPrice() +
-                " HUF";
+            String sb = "Seats booked: " + String.join(", ", seatsAsString) + "; the price for this booking is "
+                + booking.getPrice() + " HUF";
             return sb;
 
         } catch (SeatDoesNotExistException | SeatsAlreadyBookedException exception) {
