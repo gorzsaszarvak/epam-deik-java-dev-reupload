@@ -3,5 +3,9 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/final/ticket-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/final/ticket-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/money/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/money/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticket-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticket-service/src/main/resources" charset="UTF-8" />
   </component>
 </project>
